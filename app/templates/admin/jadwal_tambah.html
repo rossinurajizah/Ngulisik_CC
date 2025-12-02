@@ -1,0 +1,23 @@
+{% extends "layouts/admin.html" %}
+{% block content %}
+<h1>Tambah Jadwal</h1>
+
+<div class="card">
+<form method="POST">
+    <label>Tanggal</label>
+    <input type="date" name="Tanggal" required>
+
+    <label>Waktu Pemberangkatan</label>
+    <input type="time" name="Waktu_Pemberangkatan" required>
+
+    <label>Waktu Tiba</label>
+    <input type="time" name="Waktu_Tiba" required>
+
+    <label>Harga</label>
+    <input type="number" name="Harga" required>
+
+    <button class="btn btn-primary" type="submit">Simpan</button>
+</form>
+</div>
+
+{% endblock %}

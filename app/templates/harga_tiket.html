@@ -1,0 +1,88 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="poster-container d-flex flex-column justify-content-center align-items-center">
+        
+        <!-- Gambar Poster -->
+        <img src="{{ url_for('static', filename='images/HargaTiket.png') }}" 
+             alt="Harga Tiket" class="poster-img">
+
+        <div class="d-flex mt-4">
+            
+            <!-- Tombol Kembali -->
+            <a href="javascript:history.back()" class="btn btn-secondary me-3 px-4 py-2 shadow">
+                Kembali
+            </a>
+
+            <!-- Tombol Pesan -->
+            <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-primary">
+                <i class="fas fa-ticket-alt"></i> Pesan Tiket
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .poster-container {
+        min-height: 100vh;
+        background-color: #fff;
+        padding-top: calc(var(--bs-navbar-height, 70px));
+        padding-bottom: calc(var(--bs-footer-height, 70px));
+        border-radius: 20px;
+    }
+
+    .poster-img {
+        max-width: 40%;
+        height: auto;
+        object-fit: contain;
+        border-radius: 50px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 50px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+        background-color: #004d40;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #757575;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #00695c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-secondary:hover {
+        background-color: #616161;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-primary i, .btn-secondary i {
+        margin-right: 8px;
+    }
+</style>
+{% endblock %}

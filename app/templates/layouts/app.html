@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config_name if config_name else 'Ngulisik' }}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logoNgulisik.png') }}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ========== HEADER & NAVBAR ========== */
+        .modern-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .modern-header.scrolled {
+            background: rgba(0, 77, 64, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            height: 55px;
+            width: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .logo-img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Navigation Links */
+        .nav-menu {
+            gap: 8px;
+        }
+
+        .nav-link-modern {
+            color: #ffffff !important;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 10px 20px !important;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-link-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link-modern:hover::before {
+            left: 100%;
+        }
+
+        .nav-link-modern:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-link-modern.active {
+            background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+            color: #004d40 !important;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 235, 59, 0.4);
+        }
+
+        /* Auth Buttons */
+        .auth-section {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+            color: #004d40;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 235, 59, 0.3);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 235, 59, 0.5);
+            background: linear-gradient(135deg, #ffc107 0%, #ffeb3b 100%);
+        }
+
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 8px 24px;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .user-btn i {
+            font-size: 18px;
+        }
+
+        .dropdown-menu {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        .dropdown-item {
+            color: #004d40;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #e0f2f1;
+            color: #004d40;
+            transform: translateX(5px);
+        }
+
+        /* Mobile Toggle */
+        .navbar-toggler {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.3);
+        }
+
+        /* ========== FOOTER ========== */
+        .modern-footer {
+            background: linear-gradient(135deg, #004d40 0%, #00251a 100%);
+            color: white;
+            padding: 60px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffeb3b, #ffc107, #ffeb3b);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-column h3 {
+            color: #ffeb3b;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffeb3b, transparent);
+            border-radius: 2px;
+        }
+
+        /* Logo Column */
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: #ffeb3b;
+            color: #004d40;
+            transform: translateY(-4px) rotate(360deg);
+        }
+
+        /* Contact Info */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 235, 59, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffeb3b;
+            flex-shrink: 0;
+        }
+
+        .contact-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Links */
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-link::before {
+            content: '→';
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #ffeb3b;
+            padding-left: 8px;
+        }
+
+        .footer-link:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Copyright */
+        .footer-bottom {
+            padding: 24px 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .footer-content {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+
+            .navbar-collapse {
+                background: rgba(0, 77, 64, 0.98);
+                padding: 20px;
+                border-radius: 12px;
+                margin-top: 16px;
+            }
+
+            .nav-menu {
+                gap: 8px;
+            }
+
+            .auth-section {
+                margin-top: 16px;
+                padding-top: 16px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .modern-header {
+                padding: 0;
+            }
+
+            .logo-img {
+                height: 45px;
+            }
+        }
+
+        /* Page Content */
+        main {
+            min-height: calc(100vh - 400px);
+        }
+    </style>
+
+    {% block style %}{% endblock %}
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="modern-header" id="mainHeader">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <!-- Logo -->
+                <a class="navbar-brand logo-container" href="{{ url_for('routes.home') }}">
+                    <img src="{{ url_for('static', filename='images/Logo Ngulisik Full.png') }}" alt="Ngulisik Logo"
+                        class="logo-img">
+                </a>
+
+                <!-- Toggle button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav nav-menu">
+                        <li class="nav-item">
+                            <a href="{{ url_for('routes.home') }}" 
+                               class="nav-link nav-link-modern {% if request.path == '/' %}active{% endif %}">
+                                <i class="fas fa-home me-1"></i> Beranda
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('routes.chatbot_page') }}" 
+                            class="nav-link nav-link-modern {% if request.path.startswith('/chatbot') %}active{% endif %}">
+                                <i class="fas fa-robot me-1"></i> Chatbot
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('routes.pesan_tiket') }}" 
+                               class="nav-link nav-link-modern {% if request.path.startswith('/pesan-tiket') %}active{% endif %}">
+                                <i class="fas fa-ticket-alt me-1"></i> Pesan Tiket
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('routes.tentang') }}" 
+                               class="nav-link nav-link-modern {% if request.path.startswith('/tentang') %}active{% endif %}">
+                                <i class="fas fa-info-circle me-1"></i> Tentang Kami
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('routes.pesanan') }}" 
+                               class="nav-link nav-link-modern {% if request.path.startswith('/pesanan') %}active{% endif %}">
+                                <i class="fas fa-shopping-bag me-1"></i> Pesanan Saya
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- User Auth -->
+                <div class="auth-section">
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown user-dropdown">
+                            <button class="btn user-btn dropdown-toggle" type="button" id="userDropdown" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i>
+                                <span>{{ current_user.name }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('routes.profile') }}">
+                                        <i class="fas fa-user me-2"></i> Profil Saya
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ url_for('routes.logout') }}" method="POST">
+                                        {{ logout_form.hidden_tag() }}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Keluar
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('routes.register') }}" class="btn btn-register">
+                            <i class="fas fa-user-plus me-1"></i> Daftar
+                        </a>
+                        <a href="{{ url_for('routes.login') }}" class="btn btn-login">
+                            <i class="fas fa-sign-in-alt me-1"></i> Masuk
+                        </a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Logo & Social -->
+                <div class="footer-column footer-logo-section">
+                    <img src="{{ url_for('static', filename='images/LogoNgulisik.png') }}" 
+                         alt="Ngulisik Logo" class="footer-logo">
+                    <p class="footer-description">
+                        Ngulisik adalah layanan bus wisata di Tasikmalaya yang memberikan pengalaman 
+                        transportasi wisata yang nyaman, aman, dan berkesan untuk menjelajahi keindahan 
+                        Kota Tasikmalaya.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="footer-column">
+                    <h3>Hubungi Kami</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                Jl. Raya Tasikmalaya No.123, Tasikmalaya, Jawa Barat
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                0822 9555 1032
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                ngulisik@gmail.com
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-column">
+                    <h3>Menu Cepat</h3>
+                    <div class="footer-links">
+                        <a href="{{ url_for('routes.pesan_tiket') }}" class="footer-link">Pesan Tiket</a>
+                        <a href="{{ url_for('routes.tentang') }}" class="footer-link">Tentang Kami</a>
+                        <a href="{{ url_for('routes.rute_perjalanan') }}" class="footer-link">Rute Perjalanan</a>
+                        <a href="{{ url_for('routes.jadwal_keberangkatan') }}" class="footer-link">Jadwal</a>
+                        <a href="{{ url_for('routes.harga_tiket') }}" class="footer-link">Harga Tiket</a>
+                    </div>
+                </div>
+
+                <!-- Important Links -->
+                <div class="footer-column">
+                    <h3>Link Penting</h3>
+                    <div class="footer-links">
+                        <a href="https://www.tasikmalayakota.go.id" target="_blank" class="footer-link">
+                            Pemkot Tasikmalaya
+                        </a>
+                        <a href="https://disparbud.jabarprov.go.id" target="_blank" class="footer-link">
+                            Dinas Pariwisata
+                        </a>
+                        <a href="https://news.tasikmalaya.go.id" target="_blank" class="footer-link">
+                            Portal Berita
+                        </a>
+                        <a href="https://www.instagram.com/ngulisik.id" target="_blank" class="footer-link">
+                            Sosial Media
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Policies -->
+                <div class="footer-column">
+                    <h3>Kebijakan</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Syarat & Ketentuan</a>
+                        <a href="#" class="footer-link">Kebijakan Privasi</a>
+                        <a href="#" class="footer-link">Kebijakan Keamanan</a>
+                        <a href="#" class="footer-link">Penggunaan Cookie</a>
+                        <a href="#" class="footer-link">Bantuan & FAQ</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i> 2025 Ngulisik Tasikmalaya. Semua Hak Dilindungi. 
+                    Made with <i class="fas fa-heart" style="color: #ff6b6b;"></i> in Tasikmalaya
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Close navbar on link click (mobile)
+        document.querySelectorAll('.nav-link-modern').forEach(link => {
+            link.addEventListener('click', function() {
+                const navCollapse = document.getElementById('navbarNav');
+                if (navCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navCollapse);
+                    bsCollapse.hide();
+                }
+            });
+        });
+    </script>
+
+    {% block script %}{% endblock %}
+</body>
+</html>

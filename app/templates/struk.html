@@ -1,0 +1,1151 @@
+{% extends 'layouts/app.html' %}
+
+{% block style %}
+<style>
+    /* ========== SCREEN VIEW STYLES ========== */
+    :root {
+        --primary-green: #00A65A;
+        --primary-dark: #008f4c;
+        --text-dark: #2d3748;
+        --text-muted: #718096;
+        --bg-light: #f8f9fa;
+        --border-color: #e2e8f0;
+        --card-bg: #ffffff;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+        --gradient-primary: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+    }
+
+    body {
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        background: var(--bg-light);
+        color: var(--text-dark);
+    }
+
+    .ticket-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    /* ========== PROGRESS STEPPER ========== */
+    .progress-stepper {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        background: var(--card-bg);
+        padding: 40px 50px;
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-stepper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--gradient-primary);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .steps-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        padding: 0 20px;
+    }
+
+    .steps-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: calc(20px + 32px);
+        right: calc(20px + 32px);
+        height: 4px;
+        background: var(--primary-green);
+        border-radius: 10px;
+        z-index: 1;
+    }
+
+    .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step-link {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .step-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        background: var(--gradient-primary);
+        color: white;
+        border: 3px solid var(--primary-green);
+        box-shadow: 0 4px 12px rgba(0, 166, 90, 0.25);
+        margin-bottom: 10px;
+    }
+
+    .step-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    .step-label.active {
+        color: var(--primary-green);
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    /* ========== PAGE HEADER ========== */
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* ========== TICKET CARD (SCREEN VIEW) ========== */
+    .ticket-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 20px;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    .ticket-header {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+        padding: 28px 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ticket-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+    }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .company-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo-icon i {
+        font-size: 24px;
+        color: var(--primary-green);
+    }
+
+    .company-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+
+    .booking-code-section {
+        text-align: right;
+    }
+
+    .code-label {
+        font-size: 0.7rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .booking-code {
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 1px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 6px 12px;
+        border-radius: 6px;
+        display: inline-block;
+    }
+
+    .header-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .info-box {
+        text-align: center;
+    }
+
+    .info-box-label {
+        font-size: 0.7rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+        letter-spacing: 0.3px;
+    }
+
+    .info-box-value {
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
+    .status-confirmed {
+        color: var(--primary-green);
+        font-weight: 700;
+    }
+
+    .ticket-body {
+        padding: 32px 24px;
+    }
+
+    .section-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-title i {
+        color: var(--primary-green);
+        font-size: 1.1rem;
+    }
+
+    .customer-trip-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    .customer-details, .trip-summary {
+        background: var(--bg-light);
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 4px solid var(--primary-green);
+    }
+
+    .detail-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .detail-label-sub {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        font-weight: 600;
+    }
+
+    .detail-value-main {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .journey-route {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+    }
+
+    .route-point {
+        flex: 1;
+    }
+
+    .route-time {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+    }
+
+    .route-date {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .route-divider {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .route-icon {
+        color: var(--primary-green);
+        font-size: 1.2rem;
+    }
+
+    .route-duration {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .separator-dashed {
+        border: none;
+        border-top: 2px dashed var(--border-color);
+        margin: 28px 0;
+    }
+
+    .tickets-table-container {
+        overflow-x: auto;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+    }
+
+    .tickets-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    .tickets-table thead {
+        background: var(--bg-light);
+    }
+
+    .tickets-table th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .tickets-table td {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .tickets-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .tickets-table tbody tr:hover {
+        background: var(--bg-light);
+    }
+
+    .price-rupiah {
+        font-weight: 700;
+        color: var(--primary-green);
+    }
+
+    .total-section {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+        border-radius: 12px;
+        padding: 22px 26px;
+        color: white;
+        margin-bottom: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .total-info-group {
+        flex: 1;
+    }
+
+    .total-label {
+        font-size: 0.85rem;
+        opacity: 0.95;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+
+    .total-amount {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .btn-action {
+        padding: 14px 20px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        border: none;
+    }
+
+    .btn-primary {
+        background: var(--primary-green);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0, 166, 90, 0.25);
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 166, 90, 0.35);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--text-dark);
+        border: 2px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--bg-light);
+        border-color: var(--primary-green);
+        color: var(--primary-green);
+    }
+
+    .btn-full {
+        grid-column: 1 / -1;
+    }
+
+    .ticket-footer {
+        text-align: center;
+        padding: 18px;
+        background: white;
+        border-radius: 12px;
+        margin-top: 20px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .footer-text {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+    }
+
+    .footer-text strong {
+        color: var(--text-dark);
+        font-weight: 700;
+    }
+
+    /* ========== PRINT STYLES - E-TICKET DESIGN ========== */
+    @media print {
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+
+        body {
+            background: white !important;
+        }
+
+        .page-header,
+        .progress-stepper,
+        .action-buttons,
+        .ticket-footer,
+        .ticket-card {
+            display: none !important;
+        }
+
+        .ticket-container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .print-tickets {
+            display: block !important;
+        }
+
+        .print-ticket-page {
+            page-break-after: always;
+            page-break-inside: avoid;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .print-ticket-page:last-child {
+            page-break-after: auto;
+        }
+
+        .print-header {
+            background: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+            border-radius: 12px;
+            padding: 25px 30px;
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .print-header::after {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .print-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .print-logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .print-logo-icon i {
+            font-size: 28px;
+            color: #00A65A;
+        }
+
+        .print-company-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .print-ticket-title {
+            font-size: 1rem;
+            margin: 0;
+            opacity: 0.95;
+            font-weight: 500;
+            position: relative;
+            z-index: 2;
+        }
+
+        .print-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .print-location {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+
+        .print-route-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .print-route-subtitle {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .print-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .print-info-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #00A65A;
+        }
+
+        .print-info-label {
+            font-size: 0.75rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .print-info-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .print-journey {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .print-journey-point {
+            flex: 1;
+            text-align: center;
+        }
+
+        .print-journey-time {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .print-journey-date {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .print-journey-arrow {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .print-journey-arrow i {
+            font-size: 2rem;
+            color: #00A65A;
+        }
+
+        .print-qr-section {
+            margin-top: auto;
+            padding-top: 25px;
+            border-top: 2px dashed #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .print-instructions {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .print-instructions-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .print-instructions-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.75rem;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .print-instructions-list li {
+            margin-bottom: 5px;
+        }
+
+        .print-qr-box {
+            text-align: center;
+        }
+
+        .print-qr-code {
+            width: 140px;
+            height: 140px;
+            border: 3px solid #00A65A;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+            margin-bottom: 8px;
+        }
+
+        .print-qr-label {
+            font-size: 0.75rem;
+            color: #718096;
+            font-weight: 600;
+        }
+
+        .print-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.7rem;
+            color: #718096;
+        }
+    }
+
+    .print-tickets {
+        display: none;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .progress-stepper {
+            padding: 25px 20px;
+        }
+
+        .step-circle {
+            width: 45px;
+            height: 45px;
+        }
+
+        .ticket-container {
+            padding: 16px;
+            margin: 16px auto;
+        }
+
+        .customer-trip-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+
+        .total-section {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .header-info {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .info-box {
+            text-align: left;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-box:last-child {
+            border-bottom: none;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            font-size: 0.95rem;
+        }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+{% set struk = session.struk %}
+
+{% if not struk or not struk.tickets_list %}
+    <div class="ticket-container" style="text-align: center; padding-top: 100px;">
+        <h1 style="font-size: 1.3rem; font-weight: 700; color: var(--text-dark); margin-bottom: 12px;">
+            Data Tidak Ditemukan
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px;">
+            Data pemesanan tidak tersedia. Silakan lakukan pemesanan ulang.
+        </p>
+        <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-action btn-primary" style="max-width: 280px; margin: 0 auto;">
+            <i class="fas fa-arrow-left"></i>
+            <span>Kembali ke Beranda</span>
+        </a>
+    </div>
+{% else %}
+
+{% set steps = [
+    { 'label': 'Jadwal', 'route_name': 'routes.pesan_tiket', 'icon': 'fa-calendar-alt' },
+    { 'label': 'Kursi', 'route_name': 'routes.pilih_kursi', 'icon': 'fa-chair' },
+    { 'label': 'Bayar', 'route_name': 'routes.konfirmasi_pemesanan', 'icon': 'fa-credit-card' },
+    { 'label': 'Tiket', 'route_name': 'routes.struk', 'icon': 'fa-ticket-alt' }
+] %}
+
+{% set current_step = 4 %}
+{% set total_harga = struk.total_harga %}
+{% set kode_pemesanan = struk.kode_pemesanan if struk.kode_pemesanan else ('ORD-' ~ range(100000, 999999) | random | string) %}
+{% set tanggal_pemesanan = struk.get('tanggal_pemesanan') if struk.get('tanggal_pemesanan') else 'N/A' %}
+{% set waktu_pemesanan = struk.get('waktu_pemesanan') if struk.get('waktu_pemesanan') else 'N/A' %}
+
+<div class="ticket-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Pemesanan Berhasil!</h1>
+        <p class="page-subtitle">Invoice dan Detail Tiket Anda sudah siap, silakan cetak atau simpan.</p>
+    </div>
+
+    <!-- Progress Stepper -->
+    <div class="progress-stepper">
+        <div class="steps-wrapper">
+            {% for step in steps %}
+                <div class="step-item">
+                    {% set link_url = url_for(step.route_name, jadwal_id=struk.jadwal_id) if step.route_name == 'routes.pilih_kursi' else url_for(step.route_name) %}
+                    
+                    <a href="{{ link_url }}" class="step-link">
+                        <div class="step-circle">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <span class="step-label active">
+                            {{ step.label }}
+                        </span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Screen View Ticket Card -->
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <div class="header-top">
+                <div class="company-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h1 class="company-name">NGULISIK - INVOICE</h1>
+                </div>
+                <div class="booking-code-section">
+                    <div class="code-label">Nomor Invoice</div>
+                    <div class="booking-code">{{ kode_pemesanan }}</div>
+                </div>
+            </div>
+
+            <div class="header-info">
+                <div class="info-box">
+                    <div class="info-box-label">Tanggal Pemesanan</div>
+                    <div class="info-box-value">{{ struk.get('tanggal_pemesanan', 'N/A') }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-label">Status Pembayaran</div>
+                    <div class="info-box-value status-confirmed">LUNAS</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-label">Total Tiket Dipesan</div>
+                    <div class="info-box-value">{{ struk.tickets_list|length }} Penumpang</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ticket-body">
+            <!-- Journey Summary -->
+            <div class="trip-summary" style="background: var(--bg-light); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary-green); margin-bottom: 28px;">
+                <h3 class="section-title">
+                    <i class="fas fa-route"></i>
+                    Rangkuman Perjalanan
+                </h3>
+                
+                <div class="journey-route">
+                    <div class="route-point">
+                        <div class="route-time">{{ struk.waktu_berangkat }}</div>
+                        <div class="route-date">{{ struk.tanggal_jadwal }}</div>
+                    </div>
+
+                    <div class="route-divider">
+                        <i class="fas fa-arrow-right route-icon"></i>
+                        <div class="route-duration">Keliling Kota</div>
+                    </div>
+
+                    <div class="route-point" style="text-align: right;">
+                        <div class="route-time">{{ struk.waktu_tiba }}</div>
+                        <div class="route-date">{{ struk.tanggal_jadwal }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="separator-dashed">
+
+            <!-- Tickets List -->
+            <div class="tickets-list">
+                <h3 class="section-title">
+                    <i class="fas fa-ticket-alt"></i>
+                    Detail Tiket Penumpang
+                </h3>
+
+                <div class="tickets-table-container">
+                    <table class="tickets-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kode Tiket</th>
+                                <th>No. Kursi</th>
+                                <th>Harga</th>
+                                <th style="text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in struk.tickets_list %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td style="font-family: 'Courier New', monospace;">{{ ticket.kode }}</td>
+                                <td><span class="detail-value">{{ ticket.nomor_kursi }}</span></td>
+                                <td><span class="price-rupiah">Rp {{ "{:,.0f}".format(ticket.harga)|replace(",", ".") }}</span></td>
+                                <td style="text-align: center;"><span class="status-confirmed">✓ Aktif</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Total Payment -->
+            <div class="total-section">
+                <div class="total-info-group">
+                    <div class="total-label">Total Pembayaran (Termasuk PPN)</div>
+                    <p class="footer-text" style="text-align: left; margin-top: 5px; margin-bottom: 0;">
+                        Pembayaran telah lunas pada {{ struk.get('tanggal_pemesanan', 'N/A') }} pukul {{ struk.get('waktu_pemesanan', 'N/A') }}.
+                    </p>
+                </div>
+                <div class="total-amount">Rp {{ "{:,.0f}".format(total_harga)|replace(",", ".") }}</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn-action btn-primary">
+                    <i class="fas fa-print"></i>
+                    <span>Cetak Tiket (Print)</span>
+                </button>
+                <a href="{{ url_for('routes.pesanan') }}" class="btn-action btn-secondary">
+                    <i class="fas fa-list"></i>
+                    <span>Lihat Semua Pesanan</span>
+                </a>
+                <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-action btn-secondary btn-full">
+                    <i class="fas fa-home"></i>
+                    <span>Kembali ke Beranda</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="ticket-footer">
+        <p class="footer-text">
+            <strong>Catatan Penting:</strong><br>
+            Tiket ini berlaku sebagai bukti sah pemesanan. Harap tunjukkan <strong>Kode Tiket</strong> kepada petugas.<br>
+            Datang <strong>15 menit</strong> sebelum waktu keberangkatan untuk proses <em>check-in</em>.
+        </p>
+    </div>
+
+    <!-- Print Version - Each ticket on separate page -->
+    <div class="print-tickets">
+        {% for ticket in struk.tickets_list %}
+        <div class="print-ticket-page">
+            <!-- Header Banner -->
+            <div class="print-header">
+                <div class="print-logo-section">
+                    <div class="print-logo-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h1 class="print-company-name">NGULISIK</h1>
+                </div>
+                <p class="print-ticket-title">E-Ticket Bus Keliling Kota</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="print-content">
+                <!-- Location -->
+                <div class="print-location">
+                    <h2 class="print-route-title">Tiket Bus Keliling Kota</h2>
+                    <p class="print-route-subtitle">Perjalanan Wisata Kota</p>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="print-info-grid">
+                    <div class="print-info-item">
+                        <div class="print-info-label">Kode Pemesanan</div>
+                        <div class="print-info-value">{{ kode_pemesanan }}</div>
+                    </div>
+                    <div class="print-info-item">
+                        <div class="print-info-label">Kode Tiket</div>
+                        <div class="print-info-value">{{ ticket.kode }}</div>
+                    </div>
+                    <div class="print-info-item">
+                        <div class="print-info-label">Tanggal Berangkat</div>
+                        <div class="print-info-value">{{ struk.tanggal_jadwal }}</div>
+                    </div>
+                    <div class="print-info-item">
+                        <div class="print-info-label">Nomor Kursi</div>
+                        <div class="print-info-value">{{ ticket.nomor_kursi }}</div>
+                    </div>
+                </div>
+
+                <!-- Journey Time -->
+                <div class="print-journey">
+                    <div class="print-journey-point">
+                        <div class="print-journey-time">{{ struk.waktu_berangkat }}</div>
+                        <div class="print-journey-date">{{ struk.tanggal_jadwal }}</div>
+                    </div>
+                    <div class="print-journey-arrow">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="print-journey-point">
+                        <div class="print-journey-time">{{ struk.waktu_tiba }}</div>
+                        <div class="print-journey-date">{{ struk.tanggal_jadwal }}</div>
+                    </div>
+                </div>
+
+                <!-- QR Code & Instructions -->
+                <div class="print-qr-section">
+                    <div class="print-instructions">
+                        <h3 class="print-instructions-title">Informasi Tiket</h3>
+                        <ul class="print-instructions-list">
+                            <li>Tunjukkan e-Ticket/QR Code yang telah diterima kepada panitia di lokasi keberangkatan.</li>
+                            <li>Pemilik tiket WAJIB menunjukkan Kartu Identitas (KTP/Passport & SIM) yang telah terdaftar untuk verifikasi data diri.</li>
+                            <li>Setelah sudah terverifikasi, Pemilik tiket dapat memasuki Bus.</li>
+                            <li>Pengunjung WAJIB untuk mematuhi aturan yang berlaku selama acara berlangsung.</li>
+                        </ul>
+                    </div>
+                    <div class="print-qr-box">
+                        <div class="print-qr-code">
+                            <!-- QR Code placeholder -->
+                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                <rect width="100" height="100" fill="white"/>
+                                <text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="#00A65A" font-weight="700">
+                                    QR CODE
+                                </text>
+                                <rect x="10" y="10" width="30" height="30" fill="#00A65A"/>
+                                <rect x="60" y="10" width="30" height="30" fill="#00A65A"/>
+                                <rect x="10" y="60" width="30" height="30" fill="#00A65A"/>
+                                <rect x="45" y="45" width="15" height="15" fill="#00A65A"/>
+                            </svg>
+                        </div>
+                        <div class="print-qr-label">Tiket {{ loop.index }} dari {{ struk.tickets_list|length }}</div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="print-footer">
+                    <strong>Bus Ngulisik</strong> | Layanan Perjalanan Terpercaya<br>
+                    Hubungi kami: +62 123 4567 890 | Email: info@ngulisik.com<br>
+                    Simpan tiket ini hingga perjalanan selesai
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+{% endblock %}

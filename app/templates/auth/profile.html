@@ -1,0 +1,160 @@
+{% extends "layouts/app.html" %}
+{% block title %}Profil{% endblock %}
+{% block content %}
+
+<style>
+    /* Container utama profil */
+    .profile-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    /* Header profil */
+    .profile-header {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    /* Card profil */
+    .profile-card {
+        background: white;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Info profil */
+    .profile-info {
+        padding: 2rem;
+    }
+
+    .profile-item {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+        transition: background-color 0.3s ease;
+    }
+
+    .profile-item:last-child {
+        border-bottom: none;
+    }
+
+    .profile-item:hover {
+        background-color: #f0fdf4;
+    }
+
+    /* Label dan value */
+    .profile-label {
+        font-weight: 600;
+        color: #065f46;
+        min-width: 120px;
+        font-size: 0.95rem;
+    }
+
+    .profile-value {
+        color: #6b7280;
+        font-size: 1rem;
+        flex: 1;
+    }
+
+    /* Icon untuk setiap item */
+    .profile-item::before {
+        content: '';
+        width: 40px;
+        height: 40px;
+        margin-right: 1rem;
+        border-radius: 50%;
+        background-color: #d1fae5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .profile-item:nth-child(1)::before {
+        background-color: #d1fae5;
+    }
+
+    .profile-item:nth-child(2)::before {
+        background-color: #a7f3d0;
+    }
+
+    .profile-item:nth-child(3)::before {
+        background-color: #6ee7b7;
+    }
+
+    /* Responsif untuk mobile */
+    @media (max-width: 640px) {
+        .profile-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .profile-item {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 1rem;
+        }
+        
+        .profile-label {
+            min-width: auto;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-item::before {
+            margin-bottom: 0.5rem;
+            margin-right: 0;
+        }
+    }
+
+    /* Animasi fade in */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Profil Saya</h1>
+    </div>
+    
+    <div class="profile-card">
+        <div class="profile-info">
+            <div class="profile-item">
+                <span class="profile-label">Nama:</span>
+                <span class="profile-value">{{ user.name }}</span>
+            </div>
+            
+            <div class="profile-item">
+                <span class="profile-label">Email:</span>
+                <span class="profile-value">{{ user.email }}</span>
+            </div>
+            
+            <div class="profile-item">
+                <span class="profile-label">Telepon:</span>
+                <span class="profile-value">{{ user.telepon }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

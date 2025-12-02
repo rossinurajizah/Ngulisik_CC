@@ -1,0 +1,1318 @@
+{% extends 'layouts/app.html' %}
+
+{% block style %}
+<style>
+    /* ========== MODERN SEAT SELECTION SYSTEM ========== */
+    :root {
+        --primary-green: #00A65A;
+        --primary-dark: #008f4c;
+        --accent-yellow: #FFD700;
+        --text-dark: #1a202c;
+        --text-muted: #718096;
+        --bg-light: #f7fafc;
+        --card-bg: #ffffff;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 20px 60px rgba(0, 166, 90, 0.15);
+        --gradient-primary: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+        
+        --seat-available: #4CAF50;
+        --seat-selected: #FFD700;
+        --seat-taken: #cbd5e0;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(180deg, #f7fafc 0%, #edf2f7 100%);
+    }
+
+    .seat-container {
+        padding: 40px 20px 100px;
+        min-height: 100vh;
+    }
+
+    /* ========== PAGE HEADER ========== */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 12px;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* ========== PROGRESS STEPPER ========== */
+    .progress-stepper {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        background: var(--card-bg);
+        padding: 40px 50px;
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-stepper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--gradient-primary);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .steps-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        padding: 0 20px;
+    }
+
+    .steps-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: calc(20px + 32px);
+        right: calc(20px + 32px);
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        z-index: 1;
+    }
+
+    .steps-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: calc(20px + 32px);
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: 10px;
+        z-index: 1;
+        transition: width 0.6s ease;
+    }
+
+    .steps-wrapper.step-1::after { width: 0%; }
+    .steps-wrapper.step-2::after { width: calc(33.33% - 32px); }
+    .steps-wrapper.step-3::after { width: calc(66.66% - 32px); }
+    .steps-wrapper.step-4::after { width: calc(100% - 64px); }
+
+    .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step-link {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .step-link:hover .step-circle:not(.active):not(.completed) {
+        transform: scale(1.05);
+        border-color: var(--primary-green);
+    }
+
+    .step-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        background: white;
+        color: #cbd5e0;
+        
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        margin-bottom: 15px;
+    }
+
+    .step-circle::before {
+        content: '';
+        position: absolute;
+        width: calc(100% + 8px);
+        height: calc(100% + 8px);
+        border-radius: 50%;
+        
+        transition: all 0.4s;
+    }
+
+    .step-circle.active {
+        background: var(--gradient-primary);
+        color: white;
+        
+        transform: scale(1.15);
+        box-shadow: 0 8px 30px rgba(0, 166, 90, 0.4);
+    }
+
+    .step-circle.active::before {
+        border-color: rgba(0, 166, 90, 0.3);
+        animation: pulse-ring 2s infinite;
+    }
+
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1.3);
+            opacity: 0;
+        }
+    }
+
+    .step-circle.completed {
+        background: var(--gradient-primary);
+        color: white;
+        
+        box-shadow: 0 6px 20px rgba(0, 166, 90, 0.3);
+    }
+
+    .step-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .step-label.active {
+        color: var(--primary-green);
+        font-weight: 800;
+        font-size: 1.05rem;
+    }
+
+    /* ========== SCHEDULE INFO CARD ========== */
+    .schedule-info-card {
+        max-width: 900px;
+        margin: 0 auto 30px;
+        background: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .schedule-info-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: float-circle 8s ease-in-out infinite;
+    }
+
+    @keyframes float-circle {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(-30px, -30px); }
+    }
+
+    .schedule-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .schedule-item {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .schedule-label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .schedule-value {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .schedule-value i {
+        font-size: 1.5rem;
+        color: #FFD700;
+    }
+
+    .schedule-divider {
+        width: 2px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ========== SEAT SELECTION CARD ========== */
+    .seat-selection-card {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--card-bg);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .seat-selection-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: var(--gradient-primary);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 25px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--gradient-primary);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        box-shadow: 0 10px 30px rgba(0, 166, 90, 0.3);
+        animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .card-icon i {
+        font-size: 35px;
+        color: white;
+    }
+
+    .card-title-group h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin: 0 0 8px 0;
+    }
+
+    .card-title-group p {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    /* ========== BUS VISUALIZATION ========== */
+    .bus-container {
+        background: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+        border-radius: 30px;
+        padding: 40px 30px;
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+    }
+
+    .bus-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .bus-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 215, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 215, 0, 0.4);
+        padding: 10px 25px;
+        border-radius: 50px;
+        color: #FFD700;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .bus-badge i {
+        font-size: 1.2rem;
+    }
+
+    /* Driver area decoration */
+    .driver-area {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 180px;
+        margin-bottom: 30px;
+    }
+
+    .driver-seat {
+        width: 70px;
+        height: 70px;
+        background: rgba(203, 213, 224, 0.5);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .bus-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 500px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .bus-row {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bus-row.single-left {
+        justify-content: flex-start;
+        padding-left: 50px;
+    }
+
+    .bus-row.single-both {
+        justify-content: space-between;
+        padding: 0 50px;
+    }
+
+    .bus-row.double-seats {
+        gap: 100px;
+    }
+
+    .seat-pair {
+        display: flex;
+        gap: 12px;
+    }
+
+    /* Aisle marker vertikal */
+    .aisle-marker {
+        position: absolute;
+        left: 50%;
+        top: 150px;
+        bottom: 20px;
+        width: 3px;
+        background: repeating-linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.2),
+            rgba(255, 255, 255, 0.2) 10px,
+            transparent 10px,
+            transparent 20px
+        );
+        transform: translateX(-50%);
+    }
+
+    /* Stairs decoration */
+    .stairs-area {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding: 10px 0;
+        position: relative;
+    }
+
+    .stairs {
+        display: flex;
+        gap: 5px;
+        opacity: 0.3;
+        align-items: center;
+    }
+
+    .stair-step {
+        width: 20px;
+        height: 15px;
+        background: rgba(203, 213, 224, 0.8);
+        border-radius: 3px;
+    }
+
+    .stair-step:nth-child(1) {
+        width: 15px;
+        height: 80px;
+    }
+
+    .stair-step:nth-child(2) {
+        width: 20px;
+        height: 90px;
+    }
+
+    .stair-step:nth-child(3) {
+        width: 25px;
+        height: 100px;
+    }
+
+    /* Direction arrows */
+    .direction-arrow {
+        position: absolute;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .direction-arrow.left {
+        left: 10px;
+    }
+
+    .direction-arrow.right {
+        right: 10px;
+    }
+
+    .direction-arrow.up {
+        right: 10px;
+    }
+
+    .direction-arrow.down {
+        right: 10px;
+    }
+
+    /* ========== SEAT STYLING ========== */
+    .seat {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 3px solid transparent;
+        flex-shrink: 0;
+    }
+
+    .seat input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .seat-icon {
+        font-size: 1.5rem;
+        margin-bottom: 3px;
+    }
+
+    .seat-number {
+        font-size: 0.85rem;
+        font-weight: 800;
+    }
+
+    /* Seat States */
+    .seat.available {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+    }
+
+    .seat.available:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        border-color: #FFD700;
+    }
+
+    .seat.selected {
+        background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+        color: #1a202c;
+        transform: scale(1.1);
+        border-color: var(--primary-green);
+        box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+        animation: seatPulse 1.5s infinite;
+    }
+
+    @keyframes seatPulse {
+        0%, 100% {
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+        }
+        50% {
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.9);
+        }
+    }
+
+    .seat.taken {
+        background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        color: #718096;
+        cursor: not-allowed;
+        opacity: 0.6;
+        box-shadow: none;
+    }
+
+    .seat.taken:hover {
+        transform: none;
+    }
+
+    /* ========== LEGEND ========== */
+    .legend-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 25px;
+        background: #f7fafc;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 20px;
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s;
+    }
+
+    .legend-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .legend-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .legend-icon.available {
+        background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        color: white;
+    }
+
+    .legend-icon.selected {
+        background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+        color: #1a202c;
+    }
+
+    .legend-icon.taken {
+        background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        color: #718096;
+    }
+
+    .legend-text {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+    }
+
+    /* ========== SELECTION SUMMARY ========== */
+    .selection-summary {
+        background: linear-gradient(135deg, #e6f7ff 0%, #d4f1f4 100%);
+        border: 3px solid rgba(0, 166, 90, 0.3);
+        border-radius: 20px;
+        padding: 25px 30px;
+        margin-bottom: 25px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .selection-summary.has-selection {
+        border-color: var(--primary-green);
+        background: linear-gradient(135deg, #d4f4dd 0%, #a8e6cf 100%);
+    }
+
+    .summary-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .summary-text {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+    }
+
+    .summary-seats {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--primary-green);
+    }
+
+    /* ========== ACTION BUTTON ========== */
+    .btn-continue {
+        width: 100%;
+        padding: 20px;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.2rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 10px 35px rgba(0, 166, 90, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+    .btn-continue::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .btn-continue:hover::before {
+        left: 100%;
+    }
+
+    .btn-continue:hover:not(:disabled) {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 45px rgba(0, 166, 90, 0.6);
+    }
+
+    .btn-continue:disabled {
+        background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: 0.7;
+    }
+
+    .btn-continue:disabled:hover {
+        transform: none;
+    }
+
+    /* ========== ALERT ========== */
+    .alert-box {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px 30px;
+        background: #fff7ed;
+        border-radius: 20px;
+        border-left: 6px solid #f59e0b;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        animation: shake 0.5s ease-out;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .alert-icon {
+        width: 50px;
+        height: 50px;
+        background: #fbbf24;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .alert-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .alert-text {
+        flex: 1;
+        font-size: 1rem;
+        color: #92400e;
+        font-weight: 600;
+        line-height: 1.6;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .progress-stepper {
+            padding: 30px 25px;
+        }
+
+        .step-circle {
+            width: 56px;
+            height: 56px;
+        }
+
+        .schedule-info-card {
+            padding: 25px 20px;
+        }
+
+        .schedule-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .schedule-divider {
+            width: 80%;
+            height: 2px;
+        }
+
+        .seat-selection-card {
+            padding: 30px 20px;
+        }
+
+        .bus-grid {
+            max-width: 400px;
+        }
+
+        .seat {
+            width: 60px;
+            height: 60px;
+            font-size: 0.9rem;
+        }
+
+        .seat-icon {
+            font-size: 1.3rem;
+        }
+
+        .bus-row.double-seats {
+            gap: 80px;
+        }
+
+        .legend-container {
+            gap: 15px;
+        }
+
+        .direction-arrow {
+            font-size: 1.2rem;
+        }
+
+        .driver-area {
+            padding: 0 30px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            font-size: 1.1rem;
+        }
+
+        .bus-grid {
+            max-width: 350px;
+        }
+
+        .seat {
+            width: 55px;
+            height: 55px;
+            font-size: 0.85rem;
+        }
+
+        .seat-icon {
+            font-size: 1.1rem;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .card-icon i {
+            font-size: 28px;
+        }
+
+        .bus-row.double-seats {
+            gap: 60px;
+        }
+
+        .bus-row.single-left {
+            padding-left: 30px;
+        }
+
+        .direction-arrow {
+            font-size: 1rem;
+        }
+
+        .driver-seat {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.seat input[type="checkbox"]');
+    const btnContinue = document.getElementById('btnContinue');
+    const summaryContainer = document.querySelector('.selection-summary');
+    const summarySeats = document.getElementById('summarySeats');
+    const summaryText = document.getElementById('summaryText');
+
+    function updateSeatVisuals(checkbox) {
+        const seatDiv = checkbox.closest('.seat');
+        if (checkbox.checked) {
+            seatDiv.classList.add('selected');
+            seatDiv.classList.remove('available');
+        } else if (!checkbox.disabled) {
+            seatDiv.classList.remove('selected');
+            seatDiv.classList.add('available');
+        }
+    }
+
+    function updateSummary() {
+        const checkedSeats = Array.from(checkboxes).filter(cb => cb.checked);
+        const selectedNumbers = checkedSeats.map(cb => {
+            return cb.closest('.seat').querySelector('.seat-number').textContent;
+        });
+
+        btnContinue.disabled = checkedSeats.length === 0;
+
+        if (selectedNumbers.length > 0) {
+            summaryContainer.classList.add('has-selection');
+            summaryText.textContent = 'Kursi yang Anda pilih:';
+            summarySeats.innerHTML = `<i class="fas fa-check-circle"></i> ${selectedNumbers.join(', ')} <span style="font-size: 1rem; font-weight: 600;">(${selectedNumbers.length} kursi)</span>`;
+        } else {
+            summaryContainer.classList.remove('has-selection');
+            summaryText.textContent = 'Belum ada kursi yang dipilih';
+            summarySeats.innerHTML = 'Pilih kursi yang tersedia untuk melanjutkan';
+        }
+    }
+
+    checkboxes.forEach(cb => {
+        updateSeatVisuals(cb);
+
+        cb.addEventListener('change', function() {
+            updateSeatVisuals(this);
+            updateSummary();
+        });
+    });
+
+    updateSummary();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{% set steps = [
+    { 'label': 'Jadwal', 'route_name': 'routes.pesan_tiket', 'icon': 'fa-calendar-alt' },
+    { 'label': 'Kursi', 'route_name': 'routes.pilih_kursi', 'icon': 'fa-chair' },
+    { 'label': 'Bayar', 'route_name': 'routes.konfirmasi_pemesanan', 'icon': 'fa-credit-card' },
+    { 'label': 'Tiket', 'route_name': 'routes.struk', 'icon': 'fa-ticket-alt' }
+] %}
+
+{% set current_step = 2 %}
+
+<div class="seat-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Pilih Kursi Anda</h1>
+        <p class="page-subtitle">Pilih kursi yang nyaman untuk perjalanan Anda</p>
+    </div>
+
+    <!-- Progress Stepper -->
+    <div class="progress-stepper">
+        <div class="steps-wrapper step-{{ current_step }}">
+            {% for step in steps %}
+                {% set is_active = loop.index == current_step %}
+                {% set is_completed = loop.index < current_step %}
+                
+                <div class="step-item">
+                    {% set link_url = url_for(step.route_name, jadwal_id=jadwal.Id_Jadwal) if step.route_name == 'routes.pilih_kursi' else url_for(step.route_name) %}
+                    
+                    <a href="{{ link_url }}" class="step-link">
+                        <div class="step-circle {% if is_active %}active{% elif is_completed %}completed{% endif %}">
+                            {% if is_completed %}
+                                <i class="fas fa-check"></i>
+                            {% else %}
+                                <i class="fas {{ step.icon }}"></i>
+                            {% endif %}
+                        </div>
+                        <span class="step-label {% if is_active %}active{% elif is_completed %}completed{% endif %}">
+                            {{ step.label }}
+                        </span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Schedule Info Card -->
+    <div class="schedule-info-card">
+        <div class="schedule-content">
+            <div class="schedule-item">
+                <div class="schedule-label">Tanggal Keberangkatan</div>
+                <div class="schedule-value">
+                    <i class="fas fa-calendar-day"></i>
+                    {{ jadwal.Tanggal.strftime('%d %b %Y') }}
+                </div>
+            </div>
+            
+            <div class="schedule-divider"></div>
+            
+            <div class="schedule-item">
+                <div class="schedule-label">Waktu Berangkat</div>
+                <div class="schedule-value">
+                    <i class="fas fa-clock"></i>
+                    {{ jadwal.Waktu_Pemberangkatan.strftime('%H:%M') }}
+                </div>
+            </div>
+            
+            <div class="schedule-divider"></div>
+            
+            <div class="schedule-item">
+                <div class="schedule-label">Waktu Tiba</div>
+                <div class="schedule-value">
+                    <i class="fas fa-map-marker-alt"></i>
+                    {{ jadwal.Waktu_Tiba.strftime('%H:%M') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if kursi_list|length > 0 %}
+    <!-- Seat Selection Card -->
+    <div class="seat-selection-card">
+        <div class="card-header">
+            <div class="card-icon">
+                <i class="fas fa-chair"></i>
+            </div>
+            <div class="card-title-group">
+                <h2>Pilih Kursi Bus</h2>
+                <p>Klik kursi hijau untuk memilih tempat duduk Anda</p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('routes.pilih_kursi', jadwal_id=jadwal.Id_Jadwal) }}">
+            <input type="hidden" name="id_jadwal" value="{{ jadwal.Id_Jadwal }}">
+            
+            <!-- Bus Container -->
+            <div class="bus-container">
+                <div class="bus-header">
+                    <div class="bus-badge">
+                        <i class="fas fa-bus"></i>
+                        <span>Denah Bus Ngulisik</span>
+                    </div>
+                </div>
+
+                <!-- Driver Area -->
+                <div class="driver-area">
+                    <div class="driver-seat">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="driver-seat">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                </div>
+
+                <!-- Aisle Marker -->
+                <div class="aisle-marker"></div>
+
+                <div class="bus-grid">
+                    {% set seat_layout = [
+                        {'type': 'single-left', 'seats': [1], 'arrows': ['left']},
+                        {'type': 'single-both', 'left': [2], 'right': [4], 'arrows': ['left', 'right']},
+                        {'type': 'single-both', 'left': [3], 'right': [5], 'arrows': ['left', 'right']},
+                        {'type': 'double', 'left': [6, 7], 'right': [8, 9], 'arrows': ['up']},
+                        {'type': 'stairs'},
+                        {'type': 'double', 'left': [10, 11], 'right': [12, 13], 'arrows': ['up']},
+                        {'type': 'double', 'left': [14, 15], 'right': [16, 17], 'arrows': ['up']},
+                        {'type': 'double', 'left': [18, 19], 'right': [20, 21], 'arrows': ['down']}
+                    ] %}
+
+                    {% for row in seat_layout %}
+                        {% if row.type == 'single-left' %}
+                            <!-- Single seat on left with arrow -->
+                            <div class="bus-row single-left" style="position: relative;">
+                                {% if 'left' in row.arrows %}
+                                    <span class="direction-arrow" style="left: 10px;">→</span>
+                                {% endif %}
+                                
+                                {% for seat_num in row.seats %}
+                                    {% set k = kursi_list[seat_num - 1] %}
+                                    <label class="seat {% if k.Status_Pemesanan %}taken{% elif k.Id_Kursi|string in selected_kursi %}selected{% else %}available{% endif %}">
+                                        <input type="checkbox" 
+                                               name="kursi[]" 
+                                               value="{{ k.Id_Kursi }}" 
+                                               {% if k.Status_Pemesanan %}disabled{% elif k.Id_Kursi|string in selected_kursi %}checked{% endif %}>
+                                        <div class="seat-icon">
+                                            {% if k.Status_Pemesanan %}
+                                                <i class="fas fa-times-circle"></i>
+                                            {% elif k.Id_Kursi|string in selected_kursi %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% else %}
+                                                <i class="fas fa-chair"></i>
+                                            {% endif %}
+                                        </div>
+                                        <span class="seat-number">{{ k.Nomor_Kursi }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+
+                        {% elif row.type == 'single-both' %}
+                            <!-- Single seats on both sides with arrows -->
+                            <div class="bus-row single-both" style="position: relative;">
+                                {% if 'left' in row.arrows %}
+                                    <span class="direction-arrow" style="position: absolute; left: 10px;">→</span>
+                                {% endif %}
+                                
+                                <!-- Left seat -->
+                                <div class="seat-pair">
+                                    {% for seat_num in row.left %}
+                                        {% set k = kursi_list[seat_num - 1] %}
+                                        <label class="seat {% if k.Status_Pemesanan %}taken{% elif k.Id_Kursi|string in selected_kursi %}selected{% else %}available{% endif %}">
+                                            <input type="checkbox" 
+                                                   name="kursi[]" 
+                                                   value="{{ k.Id_Kursi }}" 
+                                                   {% if k.Status_Pemesanan %}disabled{% elif k.Id_Kursi|string in selected_kursi %}checked{% endif %}>
+                                            <div class="seat-icon">
+                                                {% if k.Status_Pemesanan %}
+                                                    <i class="fas fa-times-circle"></i>
+                                                {% elif k.Id_Kursi|string in selected_kursi %}
+                                                    <i class="fas fa-check-circle"></i>
+                                                {% else %}
+                                                    <i class="fas fa-chair"></i>
+                                                {% endif %}
+                                            </div>
+                                            <span class="seat-number">{{ k.Nomor_Kursi }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Right seat -->
+                                <div class="seat-pair">
+                                    {% for seat_num in row.right %}
+                                        {% set k = kursi_list[seat_num - 1] %}
+                                        <label class="seat {% if k.Status_Pemesanan %}taken{% elif k.Id_Kursi|string in selected_kursi %}selected{% else %}available{% endif %}">
+                                            <input type="checkbox" 
+                                                   name="kursi[]" 
+                                                   value="{{ k.Id_Kursi }}" 
+                                                   {% if k.Status_Pemesanan %}disabled{% elif k.Id_Kursi|string in selected_kursi %}checked{% endif %}>
+                                            <div class="seat-icon">
+                                                {% if k.Status_Pemesanan %}
+                                                    <i class="fas fa-times-circle"></i>
+                                                {% elif k.Id_Kursi|string in selected_kursi %}
+                                                    <i class="fas fa-check-circle"></i>
+                                                {% else %}
+                                                    <i class="fas fa-chair"></i>
+                                                {% endif %}
+                                            </div>
+                                            <span class="seat-number">{{ k.Nomor_Kursi }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                                
+                                {% if 'right' in row.arrows %}
+                                    <span class="direction-arrow" style="position: absolute; right: 10px;">←</span>
+                                {% endif %}
+                            </div>
+
+                        {% elif row.type == 'double' %}
+                            <!-- Double seats with arrows -->
+                            <div class="bus-row double-seats" style="position: relative;">
+                                <div class="seat-pair">
+                                    {% for seat_num in row.left %}
+                                        {% set k = kursi_list[seat_num - 1] %}
+                                        <label class="seat {% if k.Status_Pemesanan %}taken{% elif k.Id_Kursi|string in selected_kursi %}selected{% else %}available{% endif %}">
+                                            <input type="checkbox" 
+                                                   name="kursi[]" 
+                                                   value="{{ k.Id_Kursi }}" 
+                                                   {% if k.Status_Pemesanan %}disabled{% elif k.Id_Kursi|string in selected_kursi %}checked{% endif %}>
+                                            <div class="seat-icon">
+                                                {% if k.Status_Pemesanan %}
+                                                    <i class="fas fa-times-circle"></i>
+                                                {% elif k.Id_Kursi|string in selected_kursi %}
+                                                    <i class="fas fa-check-circle"></i>
+                                                {% else %}
+                                                    <i class="fas fa-chair"></i>
+                                                {% endif %}
+                                            </div>
+                                            <span class="seat-number">{{ k.Nomor_Kursi }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="seat-pair">
+                                    {% for seat_num in row.right %}
+                                        {% set k = kursi_list[seat_num - 1] %}
+                                        <label class="seat {% if k.Status_Pemesanan %}taken{% elif k.Id_Kursi|string in selected_kursi %}selected{% else %}available{% endif %}">
+                                            <input type="checkbox" 
+                                                   name="kursi[]" 
+                                                   value="{{ k.Id_Kursi }}" 
+                                                   {% if k.Status_Pemesanan %}disabled{% elif k.Id_Kursi|string in selected_kursi %}checked{% endif %}>
+                                            <div class="seat-icon">
+                                                {% if k.Status_Pemesanan %}
+                                                    <i class="fas fa-times-circle"></i>
+                                                {% elif k.Id_Kursi|string in selected_kursi %}
+                                                    <i class="fas fa-check-circle"></i>
+                                                {% else %}
+                                                    <i class="fas fa-chair"></i>
+                                                {% endif %}
+                                            </div>
+                                            <span class="seat-number">{{ k.Nomor_Kursi }}</span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Direction arrows -->
+                                {% if 'up' in row.arrows %}
+                                    <span class="direction-arrow" style="position: absolute; right: 15px;">↑</span>
+                                {% elif 'down' in row.arrows %}
+                                    <span class="direction-arrow" style="position: absolute; right: 15px;">↓</span>
+                                {% endif %}
+                            </div>
+
+                        {% elif row.type == 'stairs' %}
+                            <!-- Stairs for door/entrance -->
+                            <div class="stairs-area">
+                                <div class="stairs">
+                                    <div class="stair-step"></div>
+                                    <div class="stair-step"></div>
+                                    <div class="stair-step"></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend-container">
+                <div class="legend-item">
+                    <div class="legend-icon available">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <span class="legend-text">Tersedia</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon selected">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span class="legend-text">Dipilih</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon taken">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <span class="legend-text">Terisi</span>
+                </div>
+            </div>
+
+            <!-- Selection Summary -->
+            <div class="selection-summary">
+                <div class="summary-icon">
+                    <i class="fas fa-hand-pointer"></i>
+                </div>
+                <div id="summaryText" class="summary-text">Belum ada kursi yang dipilih</div>
+                <div id="summarySeats" class="summary-seats">Pilih kursi yang tersedia untuk melanjutkan</div>
+            </div>
+
+            <!-- Continue Button -->
+            <button type="submit" id="btnContinue" class="btn-continue" disabled>
+                <span>Lanjut ke Konfirmasi Pembayaran</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    {% else %}
+    <!-- Alert No Seats -->
+    <div class="alert-box">
+        <div class="alert-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="alert-text">
+            Mohon maaf, semua kursi pada jadwal bus ini sudah terisi. Silakan pilih jadwal lain atau hubungi customer service kami.
+        </div>
+    </div>
+    
+    <div style="max-width: 900px; margin: 0 auto;">
+        <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-continue">
+            <i class="fas fa-arrow-left"></i>
+            <span>Kembali ke Pilih Jadwal</span>
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

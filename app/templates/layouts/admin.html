@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title if title else "Admin Ngulisik" }}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: #161b22;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid #30363d;
+        }
+        .sidebar h2 {
+            color: #58a6ff;
+            text-align: center;
+        }
+        .menu a {
+            display: block;
+            padding: 12px 15px;
+            margin: 6px 0;
+            border-radius: 8px;
+            color: #adb5bd;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .menu a:hover,
+        .menu .active {
+            background: #238636;
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            margin-left: 280px;
+            padding: 30px;
+            width: calc(100% - 280px);
+        }
+
+        /* Card */
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #161b22;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #30363d;
+        }
+        th {
+            background: #21262d;
+            color: #58a6ff;
+        }
+        tr:hover {
+            background: #1b1f24;
+        }
+
+        /* Button */
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-primary { background: #238636; color: white; }
+        .btn-danger { background: #da3633; color: white; }
+        .btn-warning { background: #f0ad4e; color: black; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>ADMIN</h2>
+
+        <div class="menu">
+            <a href="/admin" class="{{ 'active' if active=='dashboard' else '' }}">Dashboard</a>
+            <a href="/admin/jadwal" class="{{ 'active' if active=='jadwal' else '' }}">Kelola Jadwal</a>
+            <a href="/admin/kursi" class="{{ 'active' if active=='kursi' else '' }}">Kelola Kursi</a>
+            <a href="/admin/pemesanan" class="{{ 'active' if active=='pemesanan' else '' }}">Pemesanan</a>
+            <a href="/admin/users" class="{{ 'active' if active=='users' else '' }}">Users</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

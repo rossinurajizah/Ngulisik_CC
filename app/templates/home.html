@@ -1,0 +1,1579 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+<!-- Hero Slideshow Section -->
+<section class="hero-section">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+        
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <div class="hero-image" style="background-image: url('{{ url_for('static', filename='images/slide1.jpg') }}');"></div>
+                <div class="hero-overlay">
+                    <div class="hero-particles">
+                        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+                        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+                        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+                        <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+                        <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+                        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+                        <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+                        <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+                        <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i class="fas fa-bus"></i> Bus Wisata Tasikmalaya
+                        </div>
+                        <h1 class="hero-title">NGULISIK</h1>
+                        <div class="hero-subtitle">Nguriling Kota Tasik</div>
+                        <p class="hero-description">
+                            Jelajahi keindahan Kota Tasikmalaya dengan pengalaman wisata yang tak terlupakan bersama bus modern kami
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-hero btn-hero-primary">
+                                <span><i class="fas fa-ticket-alt me-2"></i> Pesan Tiket Sekarang</span>
+                            </a>
+                            <a href="{{ url_for('routes.tentang') }}" class="btn-hero btn-hero-secondary">
+                                <span><i class="fas fa-info-circle me-2"></i> Pelajari Lebih Lanjut</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <div class="hero-image" style="background-image: url('{{ url_for('static', filename='images/slide22.jpg') }}');"></div>
+                <div class="hero-overlay">
+                    <div class="hero-particles">
+                        <div class="particle" style="left: 15%; animation-delay: 1s;"></div>
+                        <div class="particle" style="left: 25%; animation-delay: 3s;"></div>
+                        <div class="particle" style="left: 35%; animation-delay: 5s;"></div>
+                        <div class="particle" style="left: 45%; animation-delay: 2s;"></div>
+                        <div class="particle" style="left: 55%; animation-delay: 4s;"></div>
+                        <div class="particle" style="left: 65%; animation-delay: 1.5s;"></div>
+                        <div class="particle" style="left: 75%; animation-delay: 3.5s;"></div>
+                        <div class="particle" style="left: 85%; animation-delay: 5.5s;"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i class="fas fa-star"></i> Pengalaman Terbaik
+                        </div>
+                        <h1 class="hero-title">WISATA NYAMAN</h1>
+                        <div class="hero-subtitle">Bus Modern & Berkualitas</div>
+                        <p class="hero-description">
+                            Nikmati perjalanan dengan fasilitas bus yang nyaman, AC, WiFi gratis, dan pemandu wisata profesional
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-hero btn-hero-primary">
+                                <span><i class="fas fa-ticket-alt me-2"></i> Pesan Tiket Sekarang</span>
+                            </a>
+                            <a href="{{ url_for('routes.tentang') }}" class="btn-hero btn-hero-secondary">
+                                <span><i class="fas fa-info-circle me-2"></i> Pelajari Lebih Lanjut</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <div class="hero-image" style="background-image: url('{{ url_for('static', filename='images/slide3.jpg') }}');"></div>
+                <div class="hero-overlay">
+                    <div class="hero-particles">
+                        <div class="particle" style="left: 12%; animation-delay: 0.5s;"></div>
+                        <div class="particle" style="left: 22%; animation-delay: 2.5s;"></div>
+                        <div class="particle" style="left: 32%; animation-delay: 4.5s;"></div>
+                        <div class="particle" style="left: 42%; animation-delay: 1.5s;"></div>
+                        <div class="particle" style="left: 52%; animation-delay: 3.5s;"></div>
+                        <div class="particle" style="left: 62%; animation-delay: 5.5s;"></div>
+                        <div class="particle" style="left: 72%; animation-delay: 2s;"></div>
+                        <div class="particle" style="left: 82%; animation-delay: 4s;"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i class="fas fa-map-marked-alt"></i> Destinasi Menarik
+                        </div>
+                        <h1 class="hero-title">EXPLORE TASIK</h1>
+                        <div class="hero-subtitle">Temukan Keindahan Tersembunyi</div>
+                        <p class="hero-description">
+                            Kunjungi berbagai destinasi wisata menarik di Tasikmalaya dalam satu perjalanan yang menyenangkan
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-hero btn-hero-primary">
+                                <span><i class="fas fa-ticket-alt me-2"></i> Pesan Tiket Sekarang</span>
+                            </a>
+                            <a href="{{ url_for('routes.tentang') }}" class="btn-hero btn-hero-secondary">
+                                <span><i class="fas fa-info-circle me-2"></i> Pelajari Lebih Lanjut</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>
+
+<!-- Quick Info Section -->
+<section class="quick-info-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="info-card" data-aos="fade-up">
+                    <div class="info-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3>Bus Berkualitas</h3>
+                    <p>Armada bus modern dengan fasilitas lengkap untuk kenyamanan perjalanan Anda</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Aman & Terpercaya</h3>
+                    <p>Sopir berpengalaman dan standar keselamatan yang tinggi untuk ketenangan Anda</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Rute Menarik</h3>
+                    <p>Destinasi wisata pilihan yang akan membuat perjalanan Anda berkesan</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box" data-aos="zoom-in">
+            <div class="cta-content">
+                <div class="cta-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="cta-text">
+                    <h2>Siap Memulai Petualangan Anda?</h2>
+                    <p>Pesan tiket sekarang dan nikmati pengalaman wisata yang tak terlupakan di Kota Tasikmalaya</p>
+                </div>
+                <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-cta">
+                    Pesan Tiket Sekarang <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">Layanan Kami</span>
+            <h2 class="section-title">Apa yang Kami Tawarkan?</h2>
+            <p class="section-subtitle">Berbagai layanan terbaik untuk pengalaman wisata Anda di Kota Tasikmalaya</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Rute Wisata -->
+            <div class="col-lg-6">
+                <div class="service-card" data-aos="fade-right">
+                    <div class="service-icon-wrapper">
+                        <div class="service-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Rute Wisata</h3>
+                        <p>Jelajahi berbagai destinasi menarik di Tasikmalaya dengan rute perjalanan yang telah dirancang khusus untuk memberikan pengalaman wisata terbaik.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Destinasi pilihan terbaik</li>
+                            <li><i class="fas fa-check-circle"></i> Durasi perjalanan optimal</li>
+                            <li><i class="fas fa-check-circle"></i> Pemandu wisata profesional</li>
+                        </ul>
+                        <a href="{{ url_for('routes.rute_perjalanan') }}" class="btn-service">
+                            Lihat Detail <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jadwal Keberangkatan -->
+            <div class="col-lg-6">
+                <div class="service-card" data-aos="fade-left">
+                    <div class="service-icon-wrapper">
+                        <div class="service-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Jadwal Keberangkatan</h3>
+                        <p>Kami menyediakan jadwal keberangkatan yang fleksibel untuk memudahkan Anda merencanakan perjalanan wisata sesuai dengan waktu yang Anda inginkan.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Jadwal harian reguler</li>
+                            <li><i class="fas fa-check-circle"></i> Waktu keberangkatan fleksibel</li>
+                            <li><i class="fas fa-check-circle"></i> Tepat waktu & terorganisir</li>
+                        </ul>
+                        <a href="{{ url_for('routes.jadwal_keberangkatan') }}" class="btn-service">
+                            Lihat Detail <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Harga Tiket -->
+            <div class="col-lg-6">
+                <div class="service-card" data-aos="fade-right">
+                    <div class="service-icon-wrapper">
+                        <div class="service-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Harga Tiket</h3>
+                        <p>Harga tiket yang terjangkau dengan berbagai pilihan paket wisata. Dapatkan value terbaik untuk pengalaman wisata yang tak terlupakan.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Harga kompetitif</li>
+                            <li><i class="fas fa-check-circle"></i> Berbagai pilihan paket</li>
+                            <li><i class="fas fa-check-circle"></i> Promo spesial tersedia</li>
+                        </ul>
+                        <a href="{{ url_for('routes.harga_tiket') }}" class="btn-service">
+                            Lihat Detail <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fasilitas -->
+            <div class="col-lg-6">
+                <div class="service-card" data-aos="fade-left">
+                    <div class="service-icon-wrapper">
+                        <div class="service-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>Fasilitas Lengkap</h3>
+                        <p>Bus wisata kami dilengkapi dengan berbagai fasilitas modern untuk memastikan kenyamanan Anda selama perjalanan wisata.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> AC & kursi nyaman</li>
+                            <li><i class="fas fa-check-circle"></i> WiFi gratis</li>
+                            <li><i class="fas fa-check-circle"></i> Toilet & entertainment</li>
+                        </ul>
+                        <a href="{{ url_for('routes.fasilitas') }}" class="btn-service">
+                            Lihat Detail <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="fade-up">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" data-target="10000">10K+</div>
+                    <div class="stat-label">Penumpang Puas</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stat-number" data-target="10">10+</div>
+                    <div class="stat-label">Landmark Ikonik</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <div class="stat-number" data-target="5">5+</div>
+                    <div class="stat-label">Armada Bus</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-number" data-target="4.8">4.8/5</div>
+                    <div class="stat-label">Rating Pengguna</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Reset & Base */
+    body {
+        overflow-x: hidden;
+    }
+
+    main {
+        padding: 0 !important;
+    }
+
+    /* ========== HERO SECTION ========== */
+    .hero-section {
+        position: relative;
+        height: 610px;
+        overflow: hidden;
+    }
+
+    #heroCarousel,
+    .carousel-inner,
+    .carousel-item {
+        height: 100%;
+    }
+
+    .hero-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        animation: zoomEffect 25s ease-in-out infinite;
+    }
+
+    @keyframes zoomEffect {
+        0% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.15) rotate(0.5deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(0, 77, 64, 0.7) 0%, rgba(0, 0, 0, 0.85) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    /* Floating Particles */
+    .hero-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: rgba(255, 235, 59, 0.6);
+        border-radius: 50%;
+        animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100vh) translateX(50px);
+            opacity: 0;
+        }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        color: white;
+        max-width: 1100px;
+        padding: 40px 0px;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, rgba(255, 235, 59, 0.2), rgba(255, 193, 7, 0.3));
+        backdrop-filter: blur(15px);
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        border: 2px solid rgba(255, 235, 59, 0.5);
+        margin-bottom: 50px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        animation: pulse 3s ease-in-out infinite;
+        box-shadow: 0 8px 32px rgba(255, 235, 59, 0.3);
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 8px 32px rgba(255, 235, 59, 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 12px 48px rgba(255, 235, 59, 0.5);
+        }
+    }
+
+    .hero-title {
+        font-size: 5.5rem;
+        font-weight: 900;
+        letter-spacing: 15px;
+        margin-bottom: 20px;
+        line-height: 1.1;
+        background: linear-gradient(135deg, #ffffff 0%, #ffeb3b 50%, #ffffff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        background-size: 200% auto;
+        animation: shimmer 4s linear infinite, titleFloat 3s ease-in-out infinite;
+        text-shadow: 0 0 80px rgba(255, 235, 59, 0.8);
+        filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+    }
+
+    @keyframes shimmer {
+        to {
+            background-position: 200% center;
+        }
+    }
+
+    @keyframes titleFloat {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-15px);
+        }
+    }
+
+    .hero-subtitle {
+        font-size: 2.2rem;
+        font-weight: 300;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+        color: #ffeb3b;
+        text-shadow: 0 4px 20px rgba(255, 235, 59, 0.5);
+        animation: fadeIn 1.5s ease-out 0.3s both;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .hero-description {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.95);
+        max-width: 750px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+        animation: fadeIn 1.5s ease-out 0.6s both;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 25px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeIn 1.5s ease-out 0.9s both;
+        margin-bottom: 50px;
+    }
+
+    .btn-hero {
+        padding: 18px 40px;
+        border-radius: 50px;
+        font-size: 17px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-hero::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-hero:hover::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-hero span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-hero-primary {
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        color: #004d40;
+        box-shadow: 0 15px 50px rgba(255, 235, 59, 0.5);
+    }
+
+    .btn-hero-primary:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(255, 235, 59, 0.7);
+        color: #004d40;
+    }
+
+    .btn-hero-secondary {
+        background: transparent;
+        color: white;
+        border: 3px solid rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-hero-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: white;
+        transform: translateY(-8px) scale(1.05);
+        color: white;
+    }
+
+    /* Carousel Controls */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, rgba(167, 167, 167, 0.11), rgba(91, 91, 91, 0.148));
+        backdrop-filter: blur(15px);
+        border-radius: 50%;
+        border: 3px solid rgba(101, 101, 101, 0.162);
+        opacity: 1;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        z-index: 10;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .carousel-control-prev {
+        left: 40px;
+    }
+
+    .carousel-control-next {
+        right: 40px;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        background: linear-gradient(135deg, rgba(113, 113, 113, 0.397), rgba(85, 85, 85, 0.321));
+        border-color: rgba(75, 75, 75, 0.8);
+        transform: translateY(-50%) scale(1.15);
+        box-shadow: 0 10px 40px rgba(63, 63, 63, 0.6);
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 30px;
+        height: 30px;
+        opacity: 15%;
+    }
+
+    .carousel-indicators {
+        bottom: 10px;
+        z-index: 10;
+    }
+
+    .carousel-indicators [data-bs-target] {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.166);
+        border: 0px solid rgba(255, 255, 255, 0.130);
+        margin: 0 6px;
+        transition: all 0.4s ease;
+        opacity: 1;
+    }
+
+    .carousel-indicators .active {
+        width: 80px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #ffeb3b, #ffc107);
+        border-color: #ffeb3b;
+        box-shadow: 0 5px 20px rgba(255, 235, 59, 0.6);
+    }
+
+    /* ========== QUICK INFO SECTION ========== */
+    .quick-info-section {
+        padding: 100px 0;
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+        position: relative;
+    }
+
+    .quick-info-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffeb3b, transparent);
+    }
+
+    .info-card {
+        background: white;
+        padding: 50px 35px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        height: 100%;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 235, 59, 0.1), transparent);
+        transition: left 0.7s;
+    }
+
+    .info-card:hover::before {
+        left: 100%;
+    }
+
+    .info-card:hover {
+        transform: translateY(-20px) scale(1.03);
+        box-shadow: 0 25px 70px rgba(0, 77, 64, 0.2);
+        border-color: #ffeb3b;
+    }
+
+    .info-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        color: #ffeb3b;
+        font-size: 45px;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 15px 40px rgba(0, 77, 64, 0.4);
+        position: relative;
+    }
+
+    .info-icon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        opacity: 0;
+        transition: opacity 0.6s;
+    }
+
+    .info-card:hover .info-icon {
+        transform: rotateY(360deg) scale(1.1);
+        box-shadow: 0 20px 50px rgba(255, 235, 59, 0.6);
+    }
+
+    .info-card:hover .info-icon::after {
+        opacity: 1;
+    }
+
+    .info-card:hover .info-icon i {
+        color: #004d40;
+        position: relative;
+        z-index: 1;
+    }
+
+    .info-card h3 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #004d40;
+        margin-bottom: 18px;
+        transition: color 0.3s;
+    }
+
+    .info-card:hover h3 {
+        color: #00796b;
+    }
+
+    .info-card p {
+        color: #666;
+        line-height: 1.9;
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    /* ========== CTA SECTION ========== */
+    .cta-section {
+        padding: 100px 0;
+        background: linear-gradient(135deg, #004d40 0%, #00251a 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        background: radial-gradient(circle, rgba(255, 235, 59, 0.15) 0%, transparent 70%);
+        background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,235,59,0.05)"/></svg>') repeat;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation: float-circle 8s ease-in-out infinite;
+    }
+
+    .cta-section::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255, 235, 59, 0.1) 0%, transparent 70%);
+        bottom: -80px;
+        left: -80px;
+        animation: float-circle 10s ease-in-out infinite reverse;
+    }
+
+    @keyframes float-circle {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(-30px, -30px) scale(1.1); }
+    }
+
+    .cta-box {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(25px);
+        border-radius: 35px;
+        padding: 70px 70px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        position: relative;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cta-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 60px;
+        color: #004d40;
+        flex-shrink: 0;
+        box-shadow: 0 20px 50px rgba(255, 235, 59, 0.5);
+        animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 20px 50px rgba(255, 235, 59, 0.5);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 25px 60px rgba(255, 235, 59, 0.7);
+        }
+    }
+
+    .cta-text {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .cta-text h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 15px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-text p {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    .btn-cta {
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        color: #004d40;
+        padding: 20px 40px;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 15px 40px rgba(255, 235, 59, 0.5);
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-cta::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.6s;
+    }
+
+    .btn-cta:hover::before {
+        left: 100%;
+    }
+
+    .btn-cta:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 20px 60px rgba(255, 235, 59, 0.8);
+        color: #004d40;
+    }
+
+    /* ========== SERVICES SECTION ========== */
+    .services-section {
+        padding: 100px 0;
+        background: white;
+        position: relative;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .section-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+        color: #ffeb3b;
+        padding: 8px 24px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+        box-shadow: 0 8px 25px rgba(0, 77, 64, 0.3);
+    }
+
+    .section-title {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #004d40;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 5px;
+        background: linear-gradient(90deg, #ffeb3b, #ffc107);
+        border-radius: 5px;
+    }
+
+    .section-subtitle {
+        font-size: 1.3rem;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .service-card {
+        background: white;
+        border-radius: 30px;
+        padding: 50px 45px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        height: 100%;
+        display: flex;
+        gap: 35px;
+        align-items: flex-start;
+        border: 3px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0, 77, 64, 0.03) 0%, rgba(255, 235, 59, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    .service-card:hover::before {
+        opacity: 1;
+    }
+
+    .service-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 25px 70px rgba(0, 77, 64, 0.2);
+        border-color: #ffeb3b;
+    }
+
+    .service-icon-wrapper {
+        flex-shrink: 0;
+    }
+
+    .service-icon {
+        width: 110px;
+        height: 110px;
+        background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffeb3b;
+        font-size: 50px;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 15px 40px rgba(0, 77, 64, 0.4);
+        position: relative;
+    }
+
+    .service-icon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 25px;
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        opacity: 0;
+        transition: opacity 0.6s;
+    }
+
+    .service-card:hover .service-icon {
+        transform: rotateY(360deg) scale(1.1);
+        box-shadow: 0 20px 50px rgba(255, 235, 59, 0.6);
+    }
+
+    .service-card:hover .service-icon::after {
+        opacity: 1;
+    }
+
+    .service-card:hover .service-icon i {
+        color: #004d40;
+        position: relative;
+        z-index: 1;
+    }
+
+    .service-content {
+        flex: 1;
+    }
+
+    .service-content h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #004d40;
+        margin-bottom: 18px;
+        transition: color 0.3s;
+    }
+
+    .service-card:hover .service-content h3 {
+        color: #00796b;
+    }
+
+    .service-content p {
+        color: #666;
+        line-height: 1.9;
+        margin-bottom: 25px;
+        font-size: 1.05rem;
+    }
+
+    .service-features {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+
+    .service-features li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #555;
+        margin-bottom: 12px;
+        font-size: 16px;
+        transition: transform 0.3s;
+    }
+
+    .service-card:hover .service-features li {
+        transform: translateX(8px);
+    }
+
+    .service-features i {
+        color: #00a300;
+        font-size: 18px;
+        transition: transform 0.3s;
+    }
+
+    .service-card:hover .service-features i {
+        transform: scale(1.2);
+    }
+
+    .btn-service {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+        color: white;
+        padding: 14px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 8px 25px rgba(0, 77, 64, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-service::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.2);
+        transition: left 0.5s;
+    }
+
+    .btn-service:hover::before {
+        left: 100%;
+    }
+
+    .btn-service:hover {
+        transform: translateX(10px) scale(1.05);
+        box-shadow: 0 12px 35px rgba(0, 77, 64, 0.6);
+        color: white;
+    }
+
+    /* ========== STATS SECTION ========== */
+    .stats-section {
+        padding: 100px 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        position: relative;
+    }
+
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #00796b, transparent);
+    }
+
+    .stat-card {
+        background: white;
+        padding: 50px 25px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #004d40, #ffeb3b);
+        transform: scaleX(0);
+        transition: transform 0.5s;
+    }
+
+    .stat-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-15px) scale(1.05);
+        box-shadow: 0 25px 60px rgba(0, 77, 64, 0.2);
+    }
+
+    .stat-icon {
+        width: 90px;
+        height: 90px;
+        background: linear-gradient(135deg, #004d40 0%, #00796b 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        color: #ffeb3b;
+        font-size: 40px;
+        transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 10px 30px rgba(0, 77, 64, 0.3);
+        position: relative;
+    }
+
+    .stat-icon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+        opacity: 0;
+        transition: opacity 0.6s;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: rotateY(720deg) scale(1.1);
+        box-shadow: 0 15px 40px rgba(255, 235, 59, 0.6);
+    }
+
+    .stat-card:hover .stat-icon::after {
+        opacity: 1;
+    }
+
+    .stat-card:hover .stat-icon i {
+        color: #004d40;
+        position: relative;
+        z-index: 1;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 900;
+        color: #004d40;
+        margin-bottom: 12px;
+        transition: color 0.3s;
+    }
+
+    .stat-card:hover .stat-number {
+        color: #00796b;
+    }
+
+    .stat-label {
+        font-size: 1.1rem;
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1200px) {
+        .hero-title {
+            font-size: 5.5rem;
+            letter-spacing: 15px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .hero-title {
+            font-size: 4rem;
+            letter-spacing: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            letter-spacing: 4px;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+        }
+
+        .service-card {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .service-icon-wrapper {
+            margin: 0 auto;
+        }
+
+        .cta-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cta-icon {
+            margin: 0 auto;
+        }
+
+        .cta-text h2 {
+            font-size: 2.3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+        }
+
+        .carousel-control-prev {
+            left: 20px;
+        }
+
+        .carousel-control-next {
+            right: 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 600px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            letter-spacing: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .hero-buttons {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-hero {
+            width: 100%;
+            max-width: 320px;
+            padding: 16px 40px;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 55px;
+            height: 55px;
+        }
+
+        .carousel-control-prev {
+            left: 15px;
+        }
+
+        .carousel-control-next {
+            right: 15px;
+        }
+
+        .quick-info-section {
+            padding: 70px 0;
+        }
+
+        .info-card {
+            padding: 40px 30px;
+        }
+
+        .services-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .stats-section {
+            padding: 70px 0;
+        }
+
+        .cta-section {
+            padding: 70px 0;
+        }
+
+        .cta-box {
+            padding: 50px 30px;
+        }
+
+        .cta-text h2 {
+            font-size: 1.8rem;
+        }
+
+        .cta-text p {
+            font-size: 1.05rem;
+        }
+
+        .service-card {
+            padding: 40px 30px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-section {
+            min-height: 550px;
+        }
+
+        .hero-title {
+            font-size: 2.3rem;
+            letter-spacing: 5px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .hero-badge {
+            font-size: 12px;
+            padding: 10px 20px;
+            letter-spacing: 1px;
+        }
+
+        .btn-hero {
+            font-size: 15px;
+            padding: 14px 35px;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 50px;
+            height: 50px;
+        }
+
+        .carousel-indicators [data-bs-target] {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+        }
+
+        .carousel-indicators .active {
+            width: 35px;
+        }
+
+        .info-card {
+            padding: 35px 25px;
+        }
+
+        .info-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 35px;
+        }
+
+        .info-card h3 {
+            font-size: 1.4rem;
+        }
+
+        .service-icon {
+            width: 90px;
+            height: 90px;
+            font-size: 40px;
+        }
+
+        .service-content h3 {
+            font-size: 1.6rem;
+        }
+
+        .cta-icon {
+            width: 100px;
+            height: 100px;
+            font-size: 50px;
+        }
+
+        .cta-text h2 {
+            font-size: 1.5rem;
+        }
+
+        .btn-cta {
+            padding: 16px 35px;
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            font-size: 32px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .hero-title {
+            font-size: 2rem;
+            letter-spacing: 3px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<!-- AOS Animation Library -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+    
+    // Counter Animation for Stats
+    function animateCounter(element) {
+        const target = parseFloat(element.getAttribute('data-target'));
+        const originalText = element.textContent;
+        const isDecimal = originalText.includes('.');
+        const suffix = originalText.replace(/[\d.,]/g, '');
+        
+        let current = 0;
+        const increment = target / 100;
+        const duration = 2000;
+        const stepTime = duration / 100;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = originalText;
+                clearInterval(timer);
+            } else {
+                if (isDecimal) {
+                    element.textContent = current.toFixed(1) + suffix;
+                } else if (target >= 1000) {
+                    element.textContent = Math.floor(current / 1000) + 'K' + suffix;
+                } else {
+                    element.textContent = Math.floor(current) + suffix;
+                }
+            }
+        }, stepTime);
+    }
+
+    // Observe stats section for animation trigger
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumbers = entry.target.querySelectorAll('.stat-number');
+                statNumbers.forEach(stat => {
+                    animateCounter(stat);
+                });
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        statsObserver.observe(statsSection);
+    }
+</script>
+
+{% endblock %}

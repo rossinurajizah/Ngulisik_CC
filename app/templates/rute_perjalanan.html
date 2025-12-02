@@ -1,0 +1,531 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Rute Perjalanan Ngulisik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <style>
+    /* Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    /* Base Styles */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Container */
+    .route-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0,77,64,0.8), rgba(0,77,64,0.9)), url('https://www.holidify.com/images/bgImages/TASIKMALAYA.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 60px 20px;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        margin-top: 30px;
+    }
+
+    .hero-content h1 {
+        font-size: 42px;
+        margin-bottom: 15px;
+        font-weight: 700;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .route-badge {
+        display: inline-flex;
+        align-items: center;
+        background-color: rgba(255,255,255,0.2);
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 16px;
+    }
+
+    .badge-icon {
+        margin-right: 5px;
+    }
+
+    .badge-text {
+        font-weight: 500;
+    }
+
+    .badge-separator {
+        margin: 0 10px;
+    }
+
+    /* Route Description */
+    .route-description {
+        margin-bottom: 30px;
+    }
+
+    .route-card {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        background-color: #004d40;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .route-path {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .route-step {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .route-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 12px;
+    }
+
+    .route-dot.start {
+        background-color: #004d40;
+        border: 2px solid #00695c;
+    }
+
+    .route-dot.end {
+        background-color: #e53935;
+        border: 2px solid #c62828;
+    }
+
+    .route-text {
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .route-line {
+        width: 2px;
+        height: 20px;
+        background-color: #00897b;
+        margin-left: 9px;
+        margin-bottom: 5px;
+    }
+
+    .route-stops {
+        margin-left: 32px;
+        margin-bottom: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .route-stops span {
+        background-color: #e0f2f1;
+        color: #00695c;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid #b2dfdb;
+    }
+
+    /* Map Container */
+    .map-container {
+        margin-bottom: 30px;
+    }
+
+    .map-card {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .map-tools {
+        display: flex;
+        gap: 5px;
+    }
+
+    .map-btn {
+        background-color: rgba(255,255,255,0.3);
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .map-btn:hover {
+        background-color: rgba(255,255,255,0.5);
+    }
+
+    .map-wrapper {
+        position: relative;
+    }
+
+    #map {
+        height: 500px;
+        width: 100%;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        z-index: 1;
+    }
+
+    .map-legend {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 2;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .legend-color {
+        width: 15px;
+        height: 15px;
+        margin-right: 8px;
+        border-radius: 3px;
+    }
+
+    .legend-color.start {
+        background-color: #e53935;
+    }
+
+    .legend-color.waypoint {
+        background-color: #43a047;
+    }
+
+    .legend-color.route {
+        background-color: #004d40;
+    }
+
+    .legend-text {
+        font-size: 12px;
+        color: #555;
+    }
+
+    /* Attractions Section */
+    .attractions-section {
+        margin-bottom: 30px;
+    }
+
+    .attractions-section h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .attractions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+
+    .attraction-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .attraction-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+
+    .attraction-icon {
+        width: 50px;
+        height: 50px;
+        background-color: #e0f2f1;
+        color: #004d40;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .attraction-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #004d40;
+    }
+
+    .attraction-card p {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 50px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+        background-color: #004d40;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #757575;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #00695c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-secondary:hover {
+        background-color: #616161;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-primary i, .btn-secondary i {
+        margin-right: 8px;
+    }
+
+    /* Responsif untuk perangkat kecil */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 40px 15px;
+        }
+
+        .hero-content h1 {
+            font-size: 28px;
+        }
+
+        .route-badge {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        #map {
+            height: 350px;
+        }
+
+        .attractions-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .route-stops {
+            margin-left: 20px;
+        }
+
+        .route-stops span {
+            font-size: 12px;
+            padding: 4px 10px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 80%;
+            justify-content: center;
+        }
+    }
+
+    /* Hide default Leaflet Routing Machine control panel */
+    .leaflet-routing-container {
+        display: none !important;
+    }
+    </style>
+</head>
+<body>
+<div class="route-container">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Rute Perjalanan Ngulisik</h1>
+            <div class="route-badge">
+                <span class="badge-icon"><i class="fas fa-route"></i></span>
+                <span class="badge-text">15 km</span>
+                <span class="badge-separator">•</span>
+                <span class="badge-icon"><i class="fas fa-clock"></i></span>
+                <span class="badge-text">45 menit</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Route Description -->
+    <div class="route-card">
+        <div class="card-header"><h2>Informasi Rute</h2></div>
+        <div class="card-body">
+            <div class="route-path">
+                <div class="route-step"><div class="route-dot start"></div><div class="route-text">Plaza Asia</div></div>
+                <div class="route-line"></div>
+                <div class="route-stops">
+                    <span>Jl. KHZ. Mustofa</span><span>Jl. Nagarawangi</span><span>Jl. Veteran</span><span>Jl. Pasar Wetan</span>
+                    <span>Jl. Mitrabatik</span><span>Jl. RE. Martadinata</span><span>Simpang Lima</span><span>Jl. Dr. Soekardjo</span>
+                    <span>Jl. Cimulu</span><span>Jl. RAA. Wiratanuningrat</span><span>Jl. Otto Iskandardinata</span><span>Jl. Masjid Agung</span>
+                    <span>Pendestrian Jl. KHZ. Mustofa</span>
+                </div>
+                <div class="route-line"></div>
+                <div class="route-step"><div class="route-dot end"></div><div class="route-text">Plaza Asia</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-card">
+        <div class="card-header">
+            <h2>Peta Rute Interaktif</h2>
+            <div class="map-tools">
+                <button id="zoom-in" class="map-btn"><i class="fas fa-search-plus"></i></button>
+                <button id="zoom-out" class="map-btn"><i class="fas fa-search-minus"></i></button>
+                <button id="center-map" class="map-btn"><i class="fas fa-crosshairs"></i></button>
+            </div>
+        </div>
+        <div class="map-wrapper">
+            <div id="map"></div>
+            <div class="map-legend">
+                <div class="legend-item"><div class="legend-color start"></div><div class="legend-text">Titik Awal</div></div>
+                <div class="legend-item"><div class="legend-color waypoint"></div><div class="legend-text">Tempat Wisata</div></div>
+                <div class="legend-item"><div class="legend-color route"></div><div class="legend-text">Rute Perjalanan</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attractions -->
+    <div class="attractions-grid">
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-landmark"></i></div><h3>Tugu Asmaul Husna</h3><p>Monumen keagamaan 99 nama Allah.</p></div>
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-monument"></i></div><h3>Tugu Koperasi</h3><p>Lambang gerakan koperasi di Tasikmalaya.</p></div>
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-store"></i></div><h3>Sentra Batik Cigereung</h3><p>Pusat kerajinan batik khas Tasikmalaya.</p></div>
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-map-marker-alt"></i></div><h3>Tugu Simpang Lima</h3><p>Persimpangan terkenal dengan monumen ikonik.</p></div>
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-tree"></i></div><h3>Alun-Alun Tasikmalaya</h3><p>Ruang terbuka publik pusat kota.</p></div>
+        <div class="attraction-card"><div class="attraction-icon"><i class="fas fa-mosque"></i></div><h3>Masjid Agung</h3><p>Masjid utama kota dengan arsitektur megah.</p></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="javascript:history.back()" class="btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
+        <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-primary"><i class="fas fa-ticket-alt"></i> Pesan Tiket</a>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var map = L.map('map',{zoomControl:false}).setView([-7.329055,108.241884],14);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+        attribution:'&copy; OpenStreetMap contributors &copy; CARTO', subdomains:'abcd', maxZoom:19
+    }).addTo(map);
+
+    var startIcon = L.icon({iconUrl:'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png', shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png', iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34], shadowSize:[41,41]});
+    var attractionIcon = L.icon({iconUrl:'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png', shadowUrl:'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png', iconSize:[25,41], iconAnchor:[12,41], popupAnchor:[1,-34], shadowSize:[41,41]});
+
+    L.marker([-7.342256,108.215637],{icon:startIcon}).addTo(map).bindPopup('<strong>Plaza Asia</strong><br>Titik awal & akhir rute Ngulisik');
+
+    var attractions=[
+        {lat:-7.334346,lng:108.218942,name:'Tugu Asmaul Husna',desc:'Monumen keagamaan 99 nama Allah'},
+        {lat:-7.325508,lng:108.215423,name:'Tugu Koperasi',desc:'Lambang gerakan koperasi'},
+        {lat:-7.315566,lng:108.215982,name:'Sentra Batik Cigereung',desc:'Pusat kerajinan batik'},
+        {lat:-7.319936,lng:108.219932,name:'Tugu Simpang Lima',desc:'Persimpangan ikonik kota'},
+        {lat:-7.326088,lng:108.224184,name:'Alun-Alun Tasikmalaya',desc:'Ruang terbuka publik'},
+        {lat:-7.326155,lng:108.219974,name:'Masjid Agung',desc:'Masjid utama kota'}
+    ];
+
+    attractions.forEach(a=>L.marker([a.lat,a.lng],{icon:attractionIcon}).addTo(map).bindPopup(`<strong>${a.name}</strong><br>${a.desc}`));
+
+    var routeControl=L.Routing.control({
+        waypoints:[
+            L.latLng(-7.342256,108.215637),
+            L.latLng(-7.333820,108.217600),
+            L.latLng(-7.333782,108.216527),
+            L.latLng(-7.331333,108.216010),
+            L.latLng(-7.327263,108.216172),
+            L.latLng(-7.316038,108.215744),
+            L.latLng(-7.317242,108.218356),
+            L.latLng(-7.320174,108.220010),
+            L.latLng(-7.320718,108.220712),
+            L.latLng(-7.321520,108.222455),
+            L.latLng(-7.323737,108.223904),
+            L.latLng(-7.326681,108.224112),
+            L.latLng(-7.326290,108.220612),
+            L.latLng(-7.342256,108.215637)
+        ],
+        routeWhileDragging:false, createMarker:()=>null, draggable:false, addWaypoints:false, removeWaypoints:false,
+        lineOptions:{styles:[{color:'#004d40', opacity:0.8, weight:6}]}, show:false
+    }).addTo(map);
+
+    document.getElementById('zoom-in').addEventListener('click',()=>map.zoomIn());
+    document.getElementById('zoom-out').addEventListener('click',()=>map.zoomOut());
+    document.getElementById('center-map').addEventListener('click',()=>map.setView([-7.329055,108.241884],14));
+});
+</script>
+</body>
+</html>
+
+{% endblock %}

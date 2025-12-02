@@ -1,0 +1,281 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        background-image: url('{{ url_for('static', filename='images/payung.jpeg') }}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: relative;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body::before {
+        content: ''; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+    }
+
+    .container.tentang {
+        position: relative;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0;
+        background-color: transparent;
+    }
+
+    .content-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .header-section {
+        background-color: #006400;
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .header-section::after {
+        content: '';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top: 20px solid #006400;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+    }
+
+    .header-section h1 {
+        font-size: 3em;
+        font-weight: 700;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-section p {
+        font-size: 1.3em;
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    .main-content {
+        padding: 50px 40px;
+    }
+
+    .info-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
+
+    .info-box {
+        flex: 1;
+        min-width: 300px;
+        margin: 15px;
+        padding: 30px;
+        background-color: rgba(240, 255, 240, 0.7);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-box h3 {
+        color: #006400;
+        font-size: 1.6em;
+        margin-bottom: 15px;
+        font-weight: 600;
+        border-bottom: 2px solid #006400;
+        padding-bottom: 10px;
+    }
+
+    .info-box p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .history-section {
+        background-color: rgba(240, 255, 240, 0.7);
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 40px;
+    }
+
+    .history-section h2 {
+        color: #006400;
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .history-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .history-text {
+        flex: 2;
+        min-width: 300px;
+        padding-right: 30px;
+    }
+
+    .history-text p {
+        font-size: 1.1em;
+        line-height: 1.8;
+        color: #333;
+        text-align: justify;
+        margin-bottom: 15px;
+    }
+
+    .history-image {
+        flex: 1;
+        min-width: 250px;
+        text-align: center;
+    }
+
+    .history-image img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .highlight {
+        font-weight: 700;
+        color: #006400;
+    }
+
+    .cta-section {
+        text-align: center;
+        padding: 40px 20px;
+        background: linear-gradient(to right, #006400, #008800);
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .cta-section h2 {
+        color: white;
+        font-size: 2.2em;
+        margin-bottom: 20px;
+    }
+
+    .cta-section p {
+        color: white;
+        font-size: 1.2em;
+        margin-bottom: 25px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-discover {
+        display: inline-block;
+        padding: 15px 30px;
+        background-color: #ffcc00;
+        color: #006400;
+        border: none;
+        border-radius: 50px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-discover:hover {
+        background-color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .info-box, .history-text, .history-image {
+            flex: 100%;
+            padding-right: 0;
+        }
+        
+        .header-section h1 {
+            font-size: 2.2em;
+        }
+        
+        .main-content {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<div class="container tentang">
+    <div class="content-card">
+        <div class="header-section">
+            <h1>Tentang Ngulisik</h1>
+            <p>Menjelajahi Keindahan Tasikmalaya dengan Nyaman dan Berkesan</p>
+        </div>
+
+        <div class="main-content">
+            <div class="info-section">
+                <div class="info-box">
+                    <h3>Siapa Kami</h3>
+                    <p><span class="highlight">Ngulisik</span> adalah layanan bus wisata premium di Tasikmalaya yang dirancang untuk memberikan pengalaman perjalanan tak terlupakan. Nama "Ngulisik" sendiri berasal dari bahasa Sunda yang menggambarkan petualangan dan penjelajahan yang menyenangkan.</p>
+                    <p>Dengan armada bus yang nyaman dan pemandu wisata berpengalaman, kami mengajak Anda menjelajahi destinasi wisata terbaik di Tasikmalaya dengan cara yang unik dan berkesan.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>Misi Kami</h3>
+                    <p>Misi kami adalah mempromosikan pariwisata Tasikmalaya melalui layanan transportasi wisata yang nyaman, edukatif, dan terjangkau bagi semua kalangan.</p>
+                    <p>Kami berkomitmen untuk memberikan pengalaman wisata berkualitas dengan pelayanan yang ramah, informatif, dan profesional untuk memastikan setiap perjalanan Anda bersama kami menjadi momentum berharga.</p>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <h2>Sejarah Ngulisik</h2>
+                <div class="history-content">
+                    <div class="history-text">
+                        <p>Program bus wisata Ngulisik merupakan wujud nyata program Gubernur Jawa Barat dengan dukungan dana hibah Corporate Social Responsibility (CSR) Bank Jabar yang diberikan kepada organisasi angkutan darat (organda) untuk mengembangkan sektor pariwisata Kota Tasikmalaya.</p>
+                        <p>Pada tanggal <span class="highlight">21 April 2019</span>, Ngulisik diresmikan secara langsung oleh Gubernur Jawa Barat <span class="highlight">Ridwan Kamil</span>, bersama Wali Kota Tasikmalaya, <span class="highlight">Budi Budiman</span>, dan jajaran pemerintah kota Tasikmalaya.</p>
+                        <p>Dengan warna hijau cerah dan kuning bergaya vintage, bus Ngulisik hadir menyemarakkan jalanan kota santri. Tidak hanya menyediakan transportasi, loket pembelian tiket Ngulisik juga dilengkapi berbagai fasilitas menarik seperti taman bermain dan perpustakaan mini untuk anak-anak, sehingga penumpang dapat menikmati waktu menunggu dengan kegiatan yang edukatif.</p>
+                    </div>
+                    <div class="history-image">
+                        <img src="{{ url_for('static', filename='images/BusNgulisik.png') }}" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>Siap Menjelajah Tasikmalaya?</h2>
+                <p>Bergabunglah dengan ratusan wisatawan yang telah merasakan pengalaman wisata tak terlupakan bersama Ngulisik. Jangan lewatkan kesempatan untuk menjelajahi keindahan Tasikmalaya dengan cara yang nyaman dan edukatif!</p>
+                <a href="{{ url_for('routes.pesan_tiket') }}" class="btn-discover">Pesan Tiket Sekarang</a>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+                <p style="font-size: 1.1em; color: #555;">
+                    "Menjelajahi Tasikmalaya dengan Ngulisik adalah pengalaman terbaik dalam berwisata. Nyaman, informatif, dan sangat berkesan!"
+                </p>
+                <p style="font-weight: bold; color: #006400;">- Tim Ngulisik</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

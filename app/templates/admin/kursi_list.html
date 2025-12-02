@@ -1,0 +1,26 @@
+{% extends "layouts/admin.html" %}
+{% block content %}
+
+<h1>Kelola Kursi</h1>
+
+<div class="card">
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Jadwal</th>
+        <th>Nomor Kursi</th>
+        <th>Status</th>
+    </tr>
+
+    {% for k in data %}
+    <tr>
+        <td>{{ k.Id_Kursi }}</td>
+        <td>{{ k.Id_Jadwal }}</td>
+        <td>{{ k.Nomor_Kursi }}</td>
+        <td>{{ 'Terisi' if k.Status_Pemesanan else 'Kosong' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+{% endblock %}

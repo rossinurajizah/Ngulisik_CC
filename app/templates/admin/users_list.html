@@ -1,0 +1,30 @@
+{% extends "layouts/admin.html" %}
+{% block content %}
+
+<h1>Daftar Users</h1>
+
+<div class="card">
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>Telepon</th>
+        <th>Role</th>
+        <th>Daftar Pada</th>
+    </tr>
+
+    {% for u in data %}
+    <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.name }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.telepon }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+{% endblock %}

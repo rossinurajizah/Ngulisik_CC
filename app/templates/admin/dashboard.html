@@ -1,0 +1,13 @@
+{% extends "layouts/admin.html" %}
+{% block content %}
+<h1>Dashboard Admin</h1>
+
+<div class="card">
+    <h2>Statistik Sistem</h2>
+    <p>Total Jadwal: {{ total_jadwal }}</p>
+    <p>Total Kursi: {{ total_kursi }}</p>
+    <p>Total Pemesanan: {{ total_pemesanan }}</p>
+    <p>Total Users: {{ total_users }}</p>
+</div>
+
+{% endblock %}

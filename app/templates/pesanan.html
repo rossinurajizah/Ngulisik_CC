@@ -1,0 +1,485 @@
+{% extends 'layouts/app.html' %}
+
+{% block content %}
+<style>
+    .pesanan-container {
+        padding: 40px 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .pesanan-header { 
+        text-align: center; 
+        margin-bottom: 40px; 
+        position: relative; 
+    }
+    
+    .pesanan-title { 
+        font-size: 2.5rem; 
+        font-weight: 700; 
+        color: #1e8449; 
+        margin-bottom: 10px; 
+        display: inline-block; 
+        position: relative; 
+    }
+    
+    .pesanan-title::after { 
+        content: ''; 
+        position: absolute; 
+        bottom: -10px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        width: 80px; 
+        height: 4px; 
+        background: linear-gradient(90deg, #1e8449, #27ae60); 
+        border-radius: 2px; 
+    }
+    
+    .pesanan-subtitle { 
+        color: #777; 
+        font-size: 1.1rem; 
+        font-weight: 400; 
+    }
+    
+    .ticket-container { 
+        perspective: 1000px; 
+        margin-bottom: 30px; 
+    }
+    
+    .ticket { 
+        background: white; 
+        border-radius: 16px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        overflow: hidden; 
+        transition: all 0.3s ease; 
+        position: relative; 
+        max-width: 900px; 
+        margin: 0 auto;
+        display: flex;
+        min-height: 280px;
+    }
+    
+    .ticket:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15); 
+    }
+    
+    /* Bagian Kiri Tiket */
+    .ticket-left {
+        flex: 1;
+        padding: 30px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        position: relative;
+    }
+    
+    .logo-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .logo-section img {
+        max-width: 80px;
+        height: auto;
+    }
+    
+    .kode-pemesanan {
+        text-align: right;
+    }
+    
+    .kode-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        color: #888;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 3px;
+    }
+    
+    .kode-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #27ae60;
+        display: block;
+    }
+    
+    .ticket-info {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #888;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+    }
+    
+    .info-value {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .info-value.highlight {
+        color: #27ae60;
+        font-size: 1.2rem;
+    }
+    
+    .info-value.price {
+        color: #e74c3c;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+    
+    /* Travel Time Section */
+    .travel-time-container {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    
+    .travel-time {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+    
+    .time-point {
+        flex: 0 0 auto;
+        text-align: center;
+    }
+    
+    .time-value {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #27ae60;
+        margin-bottom: 3px;
+    }
+    
+    .time-label {
+        font-size: 0.75rem;
+        color: #777;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    
+    .travel-line {
+        flex: 1;
+        height: 3px;
+        background: linear-gradient(90deg, #27ae60, #2ecc71);
+        position: relative;
+        margin: 0 10px;
+    }
+    
+    .travel-line::before,
+    .travel-line::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #27ae60;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .travel-line::before {
+        left: -5px;
+    }
+    
+    .travel-line::after {
+        right: -5px;
+    }
+    
+    /* Garis Pembatas Putus-putus */
+    .ticket-divider {
+        width: 2px;
+        background-image: repeating-linear-gradient(
+            to bottom,
+            #d0d0d0,
+            #d0d0d0 8px,
+            transparent 8px,
+            transparent 16px
+        );
+        position: relative;
+        flex-shrink: 0;
+        z-index: 10;
+    }
+    
+    .ticket-divider::before,
+    .ticket-divider::after {
+        content: '';
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: #f5f5f5;
+        border-radius: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 0 2px white;
+        z-index: 10;
+    }
+    
+    .ticket-divider::before {
+        top: -15px;
+    }
+    
+    .ticket-divider::after {
+        bottom: -15px;
+    }
+    
+    /* Bagian Kanan Tiket (QR Code) */
+    .ticket-right {
+        width: 280px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .ticket-right::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 150px;
+        height: 150px;
+        background: rgba(39, 174, 96, 0.08);
+        border-radius: 50%;
+    }
+    
+    .ticket-right::after {
+        content: '';
+        position: absolute;
+        bottom: -30px;
+        left: -30px;
+        width: 100px;
+        height: 100px;
+        background: rgba(39, 174, 96, 0.08);
+        border-radius: 50%;
+    }
+    
+    .qr-container {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .qr-container img {
+        display: block;
+        width: 160px;
+        height: 160px;
+    }
+    
+    .qr-label {
+        color: #333;
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .empty-message { 
+        text-align: center; 
+        padding: 60px 20px; 
+        color: #777; 
+        font-size: 1.1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .ticket {
+            flex-direction: column;
+            min-height: auto;
+        }
+        
+        .ticket-divider {
+            width: 100%;
+            height: 2px;
+            background-image: repeating-linear-gradient(
+                to right,
+                #d0d0d0,
+                #d0d0d0 8px,
+                transparent 8px,
+                transparent 16px
+            );
+        }
+        
+        .ticket-divider::before,
+        .ticket-divider::after {
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ticket-divider::before {
+            left: -15px;
+            top: 50%;
+        }
+        
+        .ticket-divider::after {
+            right: -15px;
+            left: auto;
+            bottom: auto;
+            top: 50%;
+            transform: translate(50%, -50%);
+        }
+        
+        .ticket-right {
+            width: 100%;
+            padding: 40px 30px;
+        }
+    }
+</style>
+
+<div class="pesanan-container">
+    <div class="pesanan-header">
+        <h1 class="pesanan-title">Pesanan Saya</h1>
+        <p class="pesanan-subtitle">Daftar tiket perjalanan Anda</p>
+    </div>
+
+    {% if pemesanan|length > 0 %}
+        {% for order in pemesanan %}
+            <div class="ticket-container">
+                <div class="ticket">
+                    <!-- Bagian Kiri -->
+                    <div class="ticket-left">
+                        <div class="logo-section">
+                            <img src="{{ url_for('static', filename='images/logoNgulisik.png') }}" alt="Ngulisik Logo">
+                            <div class="kode-pemesanan">
+                                <span class="kode-label">Kode Pemesanan</span>
+                                <span class="kode-value">#{{ order.Kode_Pemesanan }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="ticket-info">
+                            <div class="info-row">
+                                <span class="info-label">Tanggal Keberangkatan</span>
+                                <span class="info-value">
+                                    {% set days = {
+                                        'Monday': 'Senin',
+                                        'Tuesday': 'Selasa',
+                                        'Wednesday': 'Rabu',
+                                        'Thursday': 'Kamis',
+                                        'Friday': 'Jumat',
+                                        'Saturday': 'Sabtu',
+                                        'Sunday': 'Minggu'
+                                    } %}
+                                    {% set months = {
+                                        'January': 'Januari',
+                                        'February': 'Februari',
+                                        'March': 'Maret',
+                                        'April': 'April',
+                                        'May': 'Mei',
+                                        'June': 'Juni',
+                                        'July': 'Juli',
+                                        'August': 'Agustus',
+                                        'September': 'September',
+                                        'October': 'Oktober',
+                                        'November': 'November',
+                                        'December': 'Desember'
+                                    } %}
+                                    {% if order.jadwal %}
+                                        {% set en_day = order.jadwal.Tanggal.strftime('%A') %}
+                                        {% set en_month = order.jadwal.Tanggal.strftime('%B') %}
+                                        {{ days[en_day] }}, {{ order.jadwal.Tanggal.strftime('%d') }} {{ months[en_month] }} {{ order.jadwal.Tanggal.strftime('%Y') }}
+                                    {% else %}
+                                        Jadwal tidak tersedia
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="info-label">Waktu Perjalanan</span>
+                                <div class="travel-time-container">
+                                    <div class="travel-time">
+                                        <div class="time-point">
+                                            <div class="time-value">{{ order.jadwal.Waktu_Pemberangkatan if order.jadwal else '-' }}</div>
+                                            <div class="time-label">Keberangkatan</div>
+                                        </div>
+                                        <div class="travel-line"></div>
+                                        <div class="time-point">
+                                            <div class="time-value">{{ order.jadwal.Waktu_Tiba if order.jadwal else '-' }}</div>
+                                            <div class="time-label">Kedatangan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="info-label">Nomor Kursi</span>
+                                <span class="info-value">
+                                    {{ order.kursi.Nomor_Kursi if order.kursi else 'Tidak ada kursi yang dipesan' }}
+                                </span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="info-label">Dipesan Pada</span>
+                                <span class="info-value">
+                                    {% if order.Tanggal_Pemesanan %}
+                                        {% set en_month_pesan = order.Tanggal_Pemesanan.strftime('%B') %}
+                                        {{ order.Tanggal_Pemesanan.strftime('%d') }} {{ months[en_month_pesan] }} {{ order.Tanggal_Pemesanan.strftime('%Y, %H:%M') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="info-label">Total Harga</span>
+                                <span class="info-value price">
+                                    Rp{{ "{:,.0f}".format(order.Total_Harga).replace(',', '.') if order.Total_Harga else '0' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Garis Pembatas -->
+                    <div class="ticket-divider"></div>
+                    
+                    <!-- Bagian Kanan (QR Code) -->
+                    <div class="ticket-right">
+                        <div class="qr-container">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data={{ order.Kode_Pemesanan }}" 
+                                 alt="QR Code">
+                        </div>
+                        <div class="qr-label">Scan untuk verifikasi</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-message">
+            <p>Anda belum memiliki pesanan. Silakan pesan tiket perjalanan Anda.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

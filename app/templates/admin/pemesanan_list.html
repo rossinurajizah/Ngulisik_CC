@@ -1,0 +1,32 @@
+{% extends "layouts/admin.html" %}
+{% block content %}
+
+<h1>Daftar Pemesanan</h1>
+
+<div class="card">
+<table>
+    <tr>
+        <th>ID</th>
+        <th>User</th>
+        <th>Jadwal</th>
+        <th>Kursi</th>
+        <th>Total Harga</th>
+        <th>Kode</th>
+        <th>Tanggal</th>
+    </tr>
+
+    {% for p in data %}
+    <tr>
+        <td>{{ p.Id_Pemesanan }}</td>
+        <td>{{ p.user.name }}</td>
+        <td>{{ p.Id_Jadwal }}</td>
+        <td>{{ p.Id_Kursi }}</td>
+        <td>Rp {{ '{:,.0f}'.format(p.Total_Harga) }}</td>
+        <td>{{ p.Kode_Pemesanan }}</td>
+        <td>{{ p.Tanggal_Pemesanan }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+{% endblock %}

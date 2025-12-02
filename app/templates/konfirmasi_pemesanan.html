@@ -1,0 +1,801 @@
+{% extends 'layouts/app.html' %}
+
+{% block style %}
+<style>
+    /* ========== MODERN CONFIRMATION PAGE ========== */
+    :root {
+        --primary-green: #00A65A;
+        --primary-dark: #008f4c;
+        --accent-yellow: #FFD700;
+        --accent-orange: #ffc107;
+        --text-dark: #1a202c;
+        --text-muted: #718096;
+        --bg-light: #f7fafc;
+        --card-bg: #ffffff;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 20px 60px rgba(0, 166, 90, 0.15);
+        --gradient-primary: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+        --gradient-yellow: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(180deg, #f7fafc 0%, #edf2f7 100%);
+    }
+
+    .confirmation-container {
+        padding: 40px 20px 100px;
+        min-height: 100vh;
+    }
+
+    /* ========== PAGE HEADER ========== */
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 0.6s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 12px;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    /* ========== PROGRESS STEPPER ========== */
+    .progress-stepper {
+        max-width: 900px;
+        margin: 0 auto 40px;
+        background: var(--card-bg);
+        padding: 40px 50px;
+        border-radius: 20px;
+        box-shadow: var(--shadow-md);
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .progress-stepper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: var(--gradient-primary);
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .steps-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        padding: 0 20px;
+    }
+
+    .steps-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: calc(20px + 32px);
+        right: calc(20px + 32px);
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        z-index: 1;
+    }
+
+    .steps-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 32px;
+        left: calc(20px + 32px);
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: 10px;
+        z-index: 1;
+        transition: width 0.6s ease;
+    }
+
+    .steps-wrapper.step-1::after { width: 0%; }
+    .steps-wrapper.step-2::after { width: calc(33.33% - 32px); }
+    .steps-wrapper.step-3::after { width: calc(66.66% - 32px); }
+    .steps-wrapper.step-4::after { width: calc(100% - 64px); }
+
+    .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step-link {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .step-circle {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        background: white;
+        color: #cbd5e0;
+        border: 4px solid #e2e8f0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        margin-bottom: 15px;
+    }
+
+    .step-circle.active {
+        background: var(--gradient-primary);
+        color: white;
+        border-color: var(--primary-green);
+        transform: scale(1.15);
+        box-shadow: 0 8px 30px rgba(0, 166, 90, 0.4);
+    }
+
+    .step-circle.completed {
+        background: var(--gradient-primary);
+        color: white;
+        border-color: var(--primary-green);
+        box-shadow: 0 6px 20px rgba(0, 166, 90, 0.3);
+    }
+
+    .step-label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .step-label.active {
+        color: var(--primary-green);
+        font-weight: 800;
+        font-size: 1.05rem;
+    }
+
+    /* ========== MAIN CONTENT GRID ========== */
+    .content-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    /* ========== JOURNEY DETAILS CARD ========== */
+    .journey-card {
+        background: var(--card-bg);
+        border-radius: 25px;
+        padding: 35px;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .journey-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: var(--gradient-primary);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--gradient-primary);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+    }
+
+    .card-icon i {
+        font-size: 28px;
+        color: white;
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin: 0;
+    }
+
+    /* Journey Timeline */
+    .journey-timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+
+    .timeline-item {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 15px rgba(0, 166, 90, 0.3);
+        z-index: 2;
+    }
+
+    .timeline-icon i {
+        font-size: 1.3rem;
+        color: white;
+    }
+
+    .timeline-content {
+        flex: 1;
+        padding-top: 5px;
+    }
+
+    .timeline-label {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        margin-bottom: 5px;
+    }
+
+    .timeline-value {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--text-dark);
+    }
+
+    .timeline-subtext {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 3px;
+    }
+
+    /* Connecting line between timeline items */
+    .timeline-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 25px;
+        top: 50px;
+        width: 3px;
+        height: calc(100% - 20px);
+        background: linear-gradient(180deg, rgba(0, 166, 90, 0.3) 0%, rgba(0, 166, 90, 0.1) 100%);
+        z-index: 1;
+    }
+
+    /* Seat Info Section */
+    .seat-info {
+        background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 25px;
+        border: 2px solid rgba(0, 166, 90, 0.2);
+    }
+
+    .seat-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .seat-header i {
+        font-size: 1.5rem;
+        color: var(--primary-green);
+    }
+
+    .seat-header h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+    }
+
+    .seat-numbers {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .seat-badge {
+        background: white;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-weight: 700;
+        color: var(--primary-green);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .seat-badge i {
+        font-size: 0.9rem;
+    }
+
+    /* ========== PAYMENT SUMMARY CARD ========== */
+    .payment-card {
+        background: var(--card-bg);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: var(--shadow-md);
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #edf2f7;
+    }
+
+    .payment-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 5px;
+    }
+
+    .payment-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+    }
+
+    /* Price Breakdown */
+    .price-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px dashed #edf2f7;
+    }
+
+    .price-item:last-of-type {
+        border-bottom: none;
+    }
+
+    .price-label {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .price-value {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    /* Total Price */
+    .total-section {
+        background: linear-gradient(135deg, #00A65A 0%, #00c968 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 25px 0;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0, 166, 90, 0.3);
+    }
+
+    .total-label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .total-amount {
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: white;
+        letter-spacing: -1px;
+    }
+
+    /* Action Buttons */
+    .btn-confirm {
+        width: 100%;
+        padding: 18px;
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 10px 35px rgba(0, 166, 90, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 15px;
+    }
+
+    .btn-confirm::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .btn-confirm:hover::before {
+        left: 100%;
+    }
+
+    .btn-confirm:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 45px rgba(0, 166, 90, 0.6);
+    }
+
+    .btn-back {
+        width: 100%;
+        padding: 15px;
+        background: #f7fafc;
+        color: var(--text-dark);
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-back:hover {
+        background: #edf2f7;
+        border-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+
+    /* Info Box */
+    .info-box {
+        background: #fff7ed;
+        border-left: 4px solid #f59e0b;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    .info-box-content {
+        display: flex;
+        gap: 12px;
+        align-items: start;
+    }
+
+    .info-icon {
+        width: 30px;
+        height: 30px;
+        background: #fbbf24;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .info-icon i {
+        font-size: 0.9rem;
+        color: white;
+    }
+
+    .info-text {
+        font-size: 0.85rem;
+        color: #92400e;
+        line-height: 1.6;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-card {
+            position: relative;
+            top: 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .progress-stepper {
+            padding: 30px 25px;
+        }
+
+        .step-circle {
+            width: 56px;
+            height: 56px;
+        }
+
+        .journey-card,
+        .payment-card {
+            padding: 25px 20px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+        }
+
+        .total-amount {
+            font-size: 1.8rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            font-size: 1.1rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .card-icon i {
+            font-size: 24px;
+        }
+
+        .timeline-value {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% set steps = [
+    { 'label': 'Jadwal', 'route_name': 'routes.pesan_tiket', 'icon': 'fa-calendar-alt' },
+    { 'label': 'Kursi', 'route_name': 'routes.pilih_kursi', 'icon': 'fa-chair' },
+    { 'label': 'Bayar', 'route_name': 'routes.konfirmasi_pemesanan', 'icon': 'fa-credit-card' },
+    { 'label': 'Tiket', 'route_name': 'routes.struk', 'icon': 'fa-ticket-alt' }
+] %}
+
+{% set current_step = 3 %}
+
+<div class="confirmation-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Konfirmasi Pembayaran</h1>
+        <p class="page-subtitle">Periksa kembali detail pemesanan Anda sebelum melanjutkan</p>
+    </div>
+
+    <!-- Progress Stepper -->
+    <div class="progress-stepper">
+        <div class="steps-wrapper step-{{ current_step }}">
+            {% for step in steps %}
+                {% set is_active = loop.index == current_step %}
+                {% set is_completed = loop.index < current_step %}
+                
+                <div class="step-item">
+                    {% set link_url = url_for(step.route_name, jadwal_id=jadwal.Id_Jadwal) if step.route_name == 'routes.pilih_kursi' else url_for(step.route_name) %}
+                    
+                    <a href="{{ link_url }}" class="step-link">
+                        <div class="step-circle {% if is_active %}active{% elif is_completed %}completed{% endif %}">
+                            {% if is_completed %}
+                                <i class="fas fa-check"></i>
+                            {% else %}
+                                <i class="fas {{ step.icon }}"></i>
+                            {% endif %}
+                        </div>
+                        <span class="step-label {% if is_active %}active{% elif is_completed %}completed{% endif %}">
+                            {{ step.label }}
+                        </span>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+        <!-- Journey Details -->
+        <div class="journey-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <h2 class="card-title">Detail Perjalanan</h2>
+            </div>
+
+            <!-- Journey Timeline -->
+            <div class="journey-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-label">Tanggal Keberangkatan</div>
+                        <div class="timeline-value">{{ jadwal.Tanggal.strftime('%d %B %Y') }}</div>
+                        <div class="timeline-subtext">{{ jadwal.Tanggal.strftime('%A') }}</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-label">Waktu Keberangkatan</div>
+                        <div class="timeline-value">{{ jadwal.Waktu_Pemberangkatan.strftime('%H:%M') }} WIB</div>
+                        <div class="timeline-subtext">Harap tiba 15 menit sebelum keberangkatan</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-label">Estimasi Waktu Tiba</div>
+                        <div class="timeline-value">{{ jadwal.Waktu_Tiba.strftime('%H:%M') }} WIB</div>
+                        <div class="timeline-subtext">Durasi perjalanan dapat bervariasi</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seat Information -->
+            <div class="seat-info">
+                <div class="seat-header">
+                    <i class="fas fa-chair"></i>
+                    <h3>Kursi yang Dipilih ({{ kursi_selected|length }} kursi)</h3>
+                </div>
+                <div class="seat-numbers">
+                    {% for k in kursi_selected %}
+                        <span class="seat-badge">
+                            <i class="fas fa-check-circle"></i>
+                            Kursi {{ k.Nomor_Kursi }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Summary -->
+        <div class="payment-card">
+            <div class="payment-header">
+                <h3 class="payment-title">Ringkasan Pembayaran</h3>
+                <p class="payment-subtitle">Detail biaya perjalanan Anda</p>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-breakdown">
+                <div class="price-item">
+                    <span class="price-label">Harga Tiket Satuan</span>
+                    <span class="price-value">Rp {{ "{:,.0f}".format(jadwal.Harga|float) }}</span>
+                </div>
+
+                <div class="price-item">
+                    <span class="price-label">Jumlah Kursi</span>
+                    <span class="price-value">{{ kursi_selected|length }} Kursi</span>
+                </div>
+
+                <div class="price-item">
+                    <span class="price-label">Subtotal</span>
+                    <span class="price-value">Rp {{ "{:,.0f}".format((jadwal.Harga|float) * (kursi_selected|length)) }}</span>
+                </div>
+            </div>
+
+            <!-- Total Section -->
+            <div class="total-section">
+                <div class="total-label">Total Pembayaran</div>
+                <div class="total-amount">Rp {{ "{:,.0f}".format(total_harga) }}</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <form method="POST" action="{{ url_for('routes.konfirmasi_pemesanan') }}">
+                <input type="hidden" name="id_jadwal" value="{{ jadwal.Id_Jadwal }}">
+                {% for k in kursi_selected %}
+                    <input type="hidden" name="kursi[]" value="{{ k.Id_Kursi }}">
+                {% endfor %}
+                
+                <button type="submit" class="btn-confirm">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Bayar & Dapatkan Tiket</span>
+                </button>
+            </form>
+
+            <a href="{{ url_for('routes.pilih_kursi', jadwal_id=jadwal.Id_Jadwal) }}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>Ubah Pilihan Kursi</span>
+            </a>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <div class="info-box-content">
+                    <div class="info-icon">
+                        <i class="fas fa-info"></i>
+                    </div>
+                    <div class="info-text">
+                        Dengan menekan tombol "Bayar & Dapatkan Tiket", kursi yang Anda pilih akan otomatis terisi dan tidak dapat dibatalkan.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

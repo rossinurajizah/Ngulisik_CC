@@ -1,0 +1,353 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+
+<div class="hero-section">
+    <div class="container hero-content text-center">
+        <span class="feature-badge">PENGALAMAN TERBAIK</span>
+        <h1 class="hero-title">Fasilitas Ngulisik</h1>
+        <p class="hero-description">
+            Nikmati perjalanan wisata budaya dengan fasilitas premium yang dirancang untuk memberikan pengalaman tak terlupakan di Kota Tasikmalaya.
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row g-4 mb-5">
+
+        <!-- Fasilitas 1: Televisi -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-tv facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">Televisi Interaktif</h3>
+                    <p class="facility-text">
+                        Saksikan tayangan berkualitas tinggi tentang sejarah dan budaya Tasikmalaya melalui TV modern kami.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fasilitas 2: Audio -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-headphones-alt facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">Sistem Audio Premium</h3>
+                    <p class="facility-text">
+                        Dengarkan narasi dan musik tradisional melalui sistem audio berkualitas tinggi.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fasilitas 3: Tour Guide -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-user-tie facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">Tour Guide Profesional</h3>
+                    <p class="facility-text">
+                        Dipandu oleh pemandu wisata berpengalaman yang menguasai sejarah dan budaya lokal.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fasilitas 4: Kenyamanan -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-couch facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">Kenyamanan Premium</h3>
+                    <p class="facility-text">
+                        Perjalanan nyaman dengan kursi empuk, AC, dan interior premium.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fasilitas 5: Dokumentasi -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-camera facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">Dokumentasi Perjalanan</h3>
+                    <p class="facility-text">
+                        Abadikan momen perjalanan Anda dengan layanan dokumentasi profesional.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fasilitas 6: Wifi -->
+        <div class="col-lg-4 col-md-6">
+            <div class="facility-card p-4">
+                <div class="decoration-pattern"></div>
+                <div class="facility-content">
+                    <div class="facility-icon-wrapper float-animation mb-4">
+                        <i class="fas fa-wifi facility-icon"></i>
+                    </div>
+                    <h3 class="facility-title">WiFi Gratis</h3>
+                    <p class="facility-text">
+                        Tetap terhubung sepanjang perjalanan dengan internet gratis.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Info tambahan -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="bg-white p-4 rounded-3 shadow-sm">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-info-circle text-primary me-3" style="font-size: 1.5rem;"></i>
+                    <h4 class="mb-0">Informasi Tambahan</h4>
+                </div>
+                <p class="mb-0">
+                    Semua fasilitas tersedia untuk paket wisata Ngulisik. Hubungi kami untuk permintaan khusus.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tombol Aksi -->
+    <div class="action-buttons text-center mb-5">
+        <a href="javascript:history.back()" class="btn btn-back me-3">
+            <i class="fas fa-arrow-left me-2"></i> Kembali
+        </a>
+        <a href="{{ url_for('routes.pesan_tiket') }}" class="btn btn-book">
+            Pesan Sekarang <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+
+
+<!-- Bootstrap -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/poppins/1.1.0/fonts/poppins-regular.woff2">
+
+<style>
+:root {
+            --primary: #004d40;
+            --primary-light: #00695c;
+            --primary-dark: #003d33;
+            --secondary: #ffc107;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 5rem 0;
+            color: var(--white);
+            border-radius: 0 0 50% 50% / 10%;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://api.placeholder.com/1920/600') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .facility-card {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .facility-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(0, 77, 64, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-card:hover .facility-icon-wrapper {
+            background-color: var(--primary);
+        }
+        
+        .facility-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .facility-card:hover .facility-icon {
+            color: var(--white);
+        }
+        
+        .facility-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .facility-text {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+        
+        .action-buttons {
+            margin-top: 4rem;
+        }
+        
+        .btn-back {
+            background-color: var(--text-light);
+            color: var(--white);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            background-color: #616161;
+            transform: translateY(-3px);
+        }
+        
+        .btn-book {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 12px 40px;
+            border-radius: 50px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 77, 64, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-book:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 77, 64, 0.4);
+        }
+        
+        .decoration-pattern {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 140px;
+            height: 140px;
+            background-color: rgba(0, 77, 64, 0.07);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .facility-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Badge styles */
+        .feature-badge {
+            display: inline-block;
+            background-color: rgba(255, 193, 7, 0.15);
+            color: var(--secondary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        /* Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .float-animation {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section {
+                padding: 3rem 0;
+            }
+            
+            .facility-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+</style>
+
+{% endblock %}
