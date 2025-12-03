@@ -13,4 +13,5 @@ google-generativeai==0.7.2
 SQLAlchemy
 wheel
 psycopg2-binary==2.9.9
+pytz
 gunicorn
