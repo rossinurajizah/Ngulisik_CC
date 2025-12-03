@@ -4,6 +4,7 @@ Flask-CORS
 Flask-Login
 python-dotenv
 Flask-WTF
+Flask-Migrate
 PyMySQL==1.1.0
 langchain==0.3.7
 langchain-core==0.3.15
