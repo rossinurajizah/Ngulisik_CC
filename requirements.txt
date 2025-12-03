@@ -14,4 +14,5 @@ SQLAlchemy
 wheel
 psycopg2-binary==2.9.9
 pytz
+email-validator
 gunicorn
