@@ -11,10 +11,11 @@ Misi Kami
 Misi kami adalah mempromosikan pariwisata Tasikmalaya melalui layanan transportasi wisata yang nyaman, edukatif, dan terjangkau bagi semua kalangan.
 Kami berkomitmen untuk memberikan pengalaman wisata berkualitas dengan pelayanan yang ramah, informatif, dan profesional untuk memastikan setiap perjalanan Anda bersama kami menjadi momentum berharga.
 
+Pemesanan tiket atau booking tiket bisa di lakukan offline langsung di Mall Asia Plaza dan juga pemesanan online lewat web ngulisik ini, user bisa menuju ke laman Pesan Tiket
 Sejarah Ngulisik
 Program bus wisata Ngulisik merupakan wujud nyata program Gubernur Jawa Barat dengan dukungan dana hibah Corporate Social Responsibility (CSR) Bank Jabar yang diberikan kepada organisasi angkutan darat (organda) untuk mengembangkan sektor pariwisata Kota Tasikmalaya.
 Pada tanggal 21 April 2019, Ngulisik diresmikan secara langsung oleh Gubernur Jawa Barat Ridwan Kamil, bersama Wali Kota Tasikmalaya, Budi Budiman, dan jajaran pemerintah kota Tasikmalaya.
-Dengan warna hijau cerah dan kuning bergaya vintage, bus Ngulisik hadir menyemarakkan jalanan kota santri. Tidak hanya menyediakan transportasi, loket pembelian tiket Ngulisik juga dilengkapi berbagai fasilitas menarik seperti taman bermain dan perpustakaan mini untuk anak-anak, sehingga penumpang dapat menikmati waktu menunggu dengan kegiatan yang edukatif.
+Dengan warna hijau cerah dan kuning bergaya vintage, bus Ngulisik hadir menyemarakkan jalanan kota santri. 
 
 - Melewati Jl. KHZ. Mustofa-Jl. Nagarawangi-Jl. Veteran-Jl. Pasar Wetan-Jl. Mitrabatik-Jl. RE. Martadinata-Simpang Lima-Jl. Dr. Soekardjo-Jl. Cimulu-Jl. RAA. Wiratanuningrat=Jl. Otto Iskandardinata-Jl. Masjid Agung - Jl. KHZ. Mustofa
 - Kembali lagi ke Mall Asia Plaza
