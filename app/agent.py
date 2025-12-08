@@ -14,7 +14,7 @@ def create_agent():
     
     # Temperature 0 terlalu rigid, 0.3 lebih flexible namun tetap konsisten
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         api_key=api_key,
         temperature=0.3,
         top_p=0.9
