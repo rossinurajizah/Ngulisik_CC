@@ -24,11 +24,11 @@ def create_agent():
         logger.error(error_msg)
         raise ValueError(error_msg)
     
-    logger.info("Initializing ChatGoogleGenerativeAI with gemini-2.0-flash")
+    logger.info("Initializing ChatGoogleGenerativeAI with gemini-2.5-flash")
     
     # Temperature 0.3 untuk balance antara konsistensi dan fleksibilitas
     llm = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         api_key=api_key,
         temperature=0.3,
         top_p=0.9
